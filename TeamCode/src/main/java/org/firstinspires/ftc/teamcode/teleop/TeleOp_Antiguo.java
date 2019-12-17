@@ -1,14 +1,13 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.hardware.Hardware;
 import org.firstinspires.ftc.teamcode.hardware.MecanumWheels;
 
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="TeleOp", group="TeleOps") //se define que la clase se trata de un teleop con una annotation
-public class TeleOp extends LinearOpMode { //la clase extendera a otra llamada 'LinearOpMode'
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="TeleOp Antiguo", group="TeleOps") //se define que la clase se trata de un teleop con una annotation
+public class TeleOp_Antiguo extends LinearOpMode { //la clase extendera a otra llamada 'LinearOpMode'
 
     //objeto que contiene el hardware del robot
     Hardware hdw;
@@ -24,6 +23,7 @@ public class TeleOp extends LinearOpMode { //la clase extendera a otra llamada '
         hdw.initHardware(false);
 
         mecanumWheels = new MecanumWheels(hdw);
+
         telemetry.addData("[>]", "All set?"); //manda un mensaje a la driver station
         telemetry.update();
 
@@ -57,47 +57,21 @@ public class TeleOp extends LinearOpMode { //la clase extendera a otra llamada '
     }
 
     public void startA() {
-        //si cualquiera de los 2 triggers es presionado (mayor que 0), el robot avanzara al 30%
-        //de velocidad. el fin de esto es para que el arrastrar la foundation en el endgame no sea
-        //tan arriesgado y haya menos probabilidad de que tiremos cualquier stone
-        if (gamepad1.left_trigger > 0.2) {
-            mecanumWheels.joystick(gamepad1,  1 - Range.clip(gamepad1.left_trigger, 0,0.7));
-        }else if(gamepad1.right_trigger > 0.2){
-            mecanumWheels.joystick(gamepad1, 1 -  Range.clip(gamepad1.right_trigger, 0,0.7));
+        if (gamepad1.left_trigger > 0.2 || gamepad1.right_trigger > 0.2) {
+            mecanumWheels.joystick(gamepad1,  0.3);
         } else {
             mecanumWheels.joystick(gamepad1, 1);
         }
-
     }
 
     public void startB() {
         //intake
         if (gamepad2.a) {
-            if (gamepad2.left_trigger > 0.1) {
-                double minusPower = Range.clip(gamepad2.left_trigger, 0,0.4);
-                hdw.motorIntakeLeft.setPower(1 - minusPower);
-                hdw.motorIntakeRight.setPower(1 - minusPower);
-            }else if (gamepad2.right_trigger > 0.1){
-                double minusPower = Range.clip(gamepad2.right_trigger, 0,0.4);
-                hdw.motorIntakeLeft.setPower(1 - minusPower);
-                hdw.motorIntakeRight.setPower(1 - minusPower);
-            }else{
-                hdw.motorIntakeLeft.setPower(1);
-                hdw.motorIntakeRight.setPower(1);
-            }
+            hdw.motorIntakeLeft.setPower(1);
+            hdw.motorIntakeRight.setPower(1);
         } else if (gamepad2.b) {
-            if (gamepad2.left_trigger > 0.1) {
-                double minusPower = Range.clip(gamepad2.left_trigger, 0,0.4);
-                hdw.motorIntakeLeft.setPower(-1 +  minusPower);
-                hdw.motorIntakeRight.setPower(-1 +  minusPower);
-            }else if (gamepad2.right_trigger > 0.1){
-                double minusPower = Range.clip(gamepad2.right_trigger, 0,0.4);
-                hdw.motorIntakeLeft.setPower(-1 +  minusPower);
-                hdw.motorIntakeRight.setPower(-1 +  minusPower);
-            }else{
-                hdw.motorIntakeLeft.setPower(-1);
-                hdw.motorIntakeRight.setPower(-1);
-            }
+            hdw.motorIntakeLeft.setPower(-0.5);
+            hdw.motorIntakeRight.setPower(-0.5);
         }else{
             hdw.motorIntakeLeft.setPower(0);
             hdw.motorIntakeRight.setPower(0);
@@ -118,10 +92,10 @@ public class TeleOp extends LinearOpMode { //la clase extendera a otra llamada '
 
         //slider del intake
         //invertimos el valor del joystick ya que por alguna razon esta invertida por default.
-        if(-gamepad2.left_stick_y > 0.1 || -gamepad2.left_stick_y < -0.1) {
-            hdw.motorSliders.setPower(-gamepad2.left_stick_y);
-        }else if(-gamepad2.right_stick_y > 0.1 || -gamepad2.right_stick_y < -0.1){
-            hdw.motorSliders.setPower(-gamepad2.right_stick_y);
+        if(gamepad2.right_trigger > 0.1) {
+            hdw.motorSliders.setPower(gamepad2.right_trigger);
+        }else if(gamepad2.left_trigger > 0.1){
+            hdw.motorSliders.setPower(-gamepad2.left_trigger);
         }else{
             hdw.motorSliders.setPower(0);
         }

@@ -96,6 +96,8 @@ public class AutonomoSkystoneAzul extends LinearOpMode {
         telemetry.addData("Pattern", pattern); //mandamos mensaje telemetry para reportar que ya se detecto un patron
         telemetry.update();
 
+        sleep(2000);
+
         if(pattern == 2){ //este falta el ultimo skystone
 
             timeDrive.strafeLeft(0.6, 0.8);

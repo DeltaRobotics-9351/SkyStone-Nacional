@@ -27,7 +27,7 @@ public class AutonomoStrafeRightTest extends LinearOpMode {
         hdw.initHardware(false); //lo inicializamos
 
         imuDrive = new IMUDriveMecanum(hdw, telemetry, status); //el objeto necesita el hardware para definir el power
-                                                          //a los motores y el telemetry para mandar mensajes.
+                                                                //a los motores y el telemetry para mandar mensajes.
         imuDrive.initIMU();
 
         telemetry.addData("[/!\\]", "Calibrando el sensor IMU, espera...");
@@ -52,7 +52,9 @@ public class AutonomoStrafeRightTest extends LinearOpMode {
         };
         t.start();
 
-        imuDrive.selfCorrectingStrafeRight(1, 3);
+        //imuDrive.strafeRight(1, 3);
+
+        imuDrive.rotate(90, 0.5);
     }
 
 

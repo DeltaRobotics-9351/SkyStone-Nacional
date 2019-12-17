@@ -5,7 +5,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.AngleDirection;
 import org.firstinspires.ftc.teamcode.OpModeStatus;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
@@ -106,10 +105,7 @@ public class IMUDriveMecanum {
         else return;
 
         // definimos el power de los motores
-        backleft.setPower(backleftpower);
-        backright.setPower(backrightpower);
-        frontleft.setPower(-frontleftpower); //este se tiene que invertir por una extrana razon
-        frontright.setPower(frontrightpower);
+        defineAllWheelPower(-frontleftpower,frontrightpower,backleftpower,backrightpower);
 
         // rotaremos hasta que se complete la vuelta
         if (degrees < 0)
@@ -134,10 +130,10 @@ public class IMUDriveMecanum {
             }
 
         // paramos los motores
-        backleft.setPower(0);
-        backright.setPower(0);
-        frontleft.setPower(0);
-        frontright.setPower(0);
+        defineAllWheelPower(0,0,0,0);
+
+        waitForTurnToFinish(); //corregimos la rotation
+        correctRotation(degrees);
 
         // reiniciamos el IMU otra vez.
         resetAngle();
@@ -161,9 +157,9 @@ public class IMUDriveMecanum {
         return deltaAngle;
     }
 
-    //como el strafing se va chueco, con el sensor imu lo podemos corregir.
+    //el strafing no es recto, con el sensor imu lo podemos corregir.
     //el tiempo es en segundos.
-    public void selfCorrectingStrafeRight(double power, double time){
+    public void strafeRight(double power, double time){
 
         long finalMillis = System.currentTimeMillis() + (long)(time*1000);
 
@@ -176,7 +172,7 @@ public class IMUDriveMecanum {
             if(getAngle() < initialAngle){
                 double deltaAngle = calculateDeltaAngles(initialAngle, getAngle());
 
-                double counteractConstant = 0.1;
+                double counteractConstant = 0.07;
                 double counteractValue = deltaAngle * counteractConstant;
 
                 frontleft = power / counteractValue;
@@ -251,5 +247,47 @@ public class IMUDriveMecanum {
             Thread.currentThread().interrupt();
         }
     }
+
+    private void correctRotation(double expectedAngle){
+
+        double deltaAngle = calculateDeltaAngles(getAngle(), expectedAngle);
+
+        rotate(deltaAngle, 0.3);
+
+    }
+
+    //esta funcion sirve para esperar que el robot este totalmente estatico.
+    private void waitForTurnToFinish(){
+
+        double beforeAngle = getAngle();
+        double deltaAngle = 0;
+
+        sleep(500);
+
+        deltaAngle = getAngle() - beforeAngle;
+
+        telemetry.addData("currentAngle", getAngle());
+        telemetry.addData("beforeAngle", beforeAngle);
+        telemetry.addData("deltaAngle", deltaAngle);
+        telemetry.update();
+
+        while(deltaAngle != 0){
+
+            telemetry.addData("currentAngle", getAngle());
+            telemetry.addData("beforeAngle", beforeAngle);
+            telemetry.addData("deltaAngle", deltaAngle);
+            telemetry.update();
+
+            deltaAngle = getAngle() - beforeAngle;
+
+            beforeAngle = getAngle();
+
+            sleep(500);
+
+        }
+
+    }
+
+
 
 }

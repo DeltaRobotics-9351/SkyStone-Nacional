@@ -68,7 +68,6 @@ public class AutonomoSkystoneRojo extends LinearOpMode {
         //esperamos que el usuario presione <play> en la driver station
         waitForStart();
 
-
         Thread t;
         t = new Thread(){
             public void run(){
@@ -99,6 +98,8 @@ public class AutonomoSkystoneRojo extends LinearOpMode {
 
         telemetry.addData("Pattern", pattern); //mandamos mensaje telemetry para reportar que ya se detecto un patron
         telemetry.update();
+
+        sleep(2000);
 
         if(pattern == 1){
 
