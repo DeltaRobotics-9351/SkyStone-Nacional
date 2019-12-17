@@ -1,0 +1,131 @@
+package org.firstinspires.ftc.teamcode.teleop;
+
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.Range;
+
+import org.firstinspires.ftc.teamcode.hardware.Hardware;
+import org.firstinspires.ftc.teamcode.hardware.MecanumWheels;
+
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="TeleOp", group="TeleOps") //se define que la clase se trata de un teleop con una annotation
+public class TeleOp extends LinearOpMode { //la clase extendera a otra llamada 'LinearOpMode'
+
+    //objeto que contiene el hardware del robot
+    Hardware hdw;
+
+    long runmillis;
+    long disappearmillis;
+
+    MecanumWheels mecanumWheels; //en este objeto se contiene el codigo para las llantas mecanum
+
+    @Override
+    public void runOpMode(){
+        hdw = new Hardware(hardwareMap); //init hardware
+        hdw.initHardware(false);
+
+        mecanumWheels = new MecanumWheels(hdw);
+        telemetry.addData("[>]", "All set?"); //manda un mensaje a la driver station
+        telemetry.update();
+
+        waitForStart(); //espera hasta que se presione <play> en la driver station
+
+        runmillis = System.currentTimeMillis();
+        disappearmillis = runmillis + (3000); //el tiempo en el que desaparecera el mensaje "GO!!!" (milisegundos)
+
+        while(opModeIsActive()){
+
+            if(System.currentTimeMillis() < disappearmillis) { //se ejecuta cuando no hayan pasado mas de 3 segundos (3000 ms) desde que se dio a <play>
+                telemetry.addData("[>]", "GO!!!");
+            }
+
+            startA(); //movimientos del start A
+
+            startB();//movimientos del start B
+
+            telemetry.addData("wheelFrontRightPower", mecanumWheels.wheelFrontRightPower);
+            telemetry.addData("wheelFrontLeftPower", mecanumWheels.wheelFrontLeftPower);
+            telemetry.addData("wheelBackRightPower", mecanumWheels.wheelBackRightPower);
+            telemetry.addData("wheelBackLeftPower", mecanumWheels.wheelBackLeftPower);
+            telemetry.addData("wheels turbo", mecanumWheels.turbo);
+            telemetry.addData("intake power right", hdw.motorIntakeRight.getPower());
+            telemetry.addData("intake power left", hdw.motorIntakeLeft.getPower());
+            telemetry.addData("servoStoneAutonomous position", hdw.servoStoneAutonomous.getPosition());
+
+            telemetry.update();  //manda los mensajes telemetry a la driver station
+        }
+
+    }
+
+    public void startA() {
+        //si cualquiera de los 2 triggers es presionado (mayor que 0), el robot avanzara al 30%
+        //de velocidad. el fin de esto es para que el arrastrar la foundation en el endgame no sea
+        //tan arriesgado y haya menos probabilidad de que tiremos cualquier stone
+        if (gamepad1.left_trigger > 0.2) {
+            mecanumWheels.joystick(gamepad1,  1 - Range.clip(gamepad1.left_trigger, 0,0.7));
+        }else if(gamepad1.right_trigger > 0.2){
+            mecanumWheels.joystick(gamepad1, 1 -  Range.clip(gamepad1.right_trigger, 0,0.7));
+        } else {
+            mecanumWheels.joystick(gamepad1, 1);
+        }
+
+    }
+
+    public void startB() {
+        //intake
+        if (gamepad2.a) {
+            if (gamepad2.left_trigger > 0.1) {
+                double minusPower = Range.clip(gamepad2.left_trigger, 0,0.4);
+                hdw.motorIntakeLeft.setPower(1 - minusPower);
+                hdw.motorIntakeRight.setPower(1 - minusPower);
+            }else if (gamepad2.right_trigger > 0.1){
+                double minusPower = Range.clip(gamepad2.right_trigger, 0,0.4);
+                hdw.motorIntakeLeft.setPower(1 - minusPower);
+                hdw.motorIntakeRight.setPower(1 - minusPower);
+            }else{
+                hdw.motorIntakeLeft.setPower(1);
+                hdw.motorIntakeRight.setPower(1);
+            }
+        } else if (gamepad2.b) {
+            if (gamepad2.left_trigger > 0.1) {
+                double minusPower = Range.clip(gamepad2.left_trigger, 0,0.4);
+                hdw.motorIntakeLeft.setPower(-1 +  minusPower);
+                hdw.motorIntakeRight.setPower(-1 +  minusPower);
+            }else if (gamepad2.right_trigger > 0.1){
+                double minusPower = Range.clip(gamepad2.right_trigger, 0,0.4);
+                hdw.motorIntakeLeft.setPower(-1 +  minusPower);
+                hdw.motorIntakeRight.setPower(-1 +  minusPower);
+            }else{
+                hdw.motorIntakeLeft.setPower(-1);
+                hdw.motorIntakeRight.setPower(-1);
+            }
+        }else{
+            hdw.motorIntakeLeft.setPower(0);
+            hdw.motorIntakeRight.setPower(0);
+        }
+
+        if(gamepad2.dpad_up){
+            hdw.servoCapstone.setPosition(1);
+        }else if (gamepad2.dpad_down){
+            hdw.servoCapstone.setPosition(0.25);
+        }
+
+        //servo para arrastrar las stones
+        if(gamepad2.y){
+            hdw.servoStoneAutonomous.setPosition(0);
+        }else if(gamepad2.x){
+            hdw.servoStoneAutonomous.setPosition(0.5);
+        }
+
+        //slider del intake
+        //invertimos el valor del joystick ya que por alguna razon esta invertida por default.
+        if(-gamepad2.left_stick_y > 0.1 || -gamepad2.left_stick_y < -0.1) {
+            hdw.motorSliders.setPower(-gamepad2.left_stick_y);
+        }else if(-gamepad2.right_stick_y > 0.1 || -gamepad2.right_stick_y < -0.1){
+            hdw.motorSliders.setPower(-gamepad2.right_stick_y);
+        }else{
+            hdw.motorSliders.setPower(0);
+        }
+
+    }
+
+}
