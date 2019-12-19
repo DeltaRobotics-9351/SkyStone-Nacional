@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.hardware.Hardware;
 import org.firstinspires.ftc.teamcode.hardware.MecanumWheels;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="TeleOp", group="TeleOps") //se define que la clase se trata de un teleop con una annotation
-public class TeleOp_Nuevo extends LinearOpMode { //la clase extendera a otra llamada 'LinearOpMode'
+public class TeleOp extends LinearOpMode { //la clase extendera a otra llamada 'LinearOpMode'
 
     //objeto que contiene el hardware del robot
     Hardware hdw;
