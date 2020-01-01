@@ -5,9 +5,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.OpModeStatus;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 public class IMUDriveMecanum {
@@ -25,12 +25,12 @@ public class IMUDriveMecanum {
 
     Telemetry telemetry;
 
-    OpModeStatus status;
+    LinearOpMode opMode;
 
-    public IMUDriveMecanum(Hardware hdw, Telemetry telemetry, OpModeStatus status){
+    public IMUDriveMecanum(Hardware hdw, Telemetry telemetry, LinearOpMode opMode){
         this.hdw = hdw;
         this.telemetry = telemetry;
-        this.status = status;
+        this.opMode = opMode;
     }
 
     public void initIMU(){
@@ -53,7 +53,7 @@ public class IMUDriveMecanum {
     }
 
     public void waitForIMUCalibration(){
-        while (!imu.isGyroCalibrated()){ }
+        while (!imu.isGyroCalibrated() && opMode.opModeIsActive()){ }
     }
 
     private double getAngle()
@@ -110,20 +110,20 @@ public class IMUDriveMecanum {
         // rotaremos hasta que se complete la vuelta
         if (degrees < 0)
         {
-            while (getAngle() == 0 && status.opModeIsActive) { //al girar a la derecha necesitamos salirnos de 0 grados primero
+            while (getAngle() == 0 && opMode.opModeIsActive()) { //al girar a la derecha necesitamos salirnos de 0 grados primero
                 telemetry.addData("imuAngle", getAngle());
                 telemetry.addData("degreesDestino", degrees);
                 telemetry.update();
             }
 
-            while (getAngle() > degrees && status.opModeIsActive) { //entramos en un bucle hasta que los degrees sean los esperados
+            while (getAngle() > degrees && opMode.opModeIsActive()) { //entramos en un bucle hasta que los degrees sean los esperados
                 telemetry.addData("imuAngle", getAngle());
                 telemetry.addData("degreesDestino", degrees);
                 telemetry.update();
             }
         }
         else
-            while (getAngle() < degrees && status.opModeIsActive) { //entramos en un bucle hasta que los degrees sean los esperados
+            while (getAngle() < degrees && opMode.opModeIsActive()) { //entramos en un bucle hasta que los degrees sean los esperados
                 telemetry.addData("imuAngle", getAngle());
                 telemetry.addData("degreesDestino", degrees);
                 telemetry.update();
@@ -165,7 +165,7 @@ public class IMUDriveMecanum {
 
         double initialAngle = getAngle();
 
-        while(System.currentTimeMillis() < finalMillis){
+        while(System.currentTimeMillis() < finalMillis && opMode.opModeIsActive()){
 
             double frontleft = power, frontright = -power, backleft = -power, backright = power;
 
@@ -257,7 +257,7 @@ public class IMUDriveMecanum {
     }
 
     //esta funcion sirve para esperar que el robot este totalmente estatico.
-    private void waitForTurnToFinish(){
+    private void waitForTurnToFinish() {
 
         double beforeAngle = getAngle();
         double deltaAngle = 0;
@@ -271,7 +271,7 @@ public class IMUDriveMecanum {
         telemetry.addData("deltaAngle", deltaAngle);
         telemetry.update();
 
-        while(deltaAngle != 0){
+        while (deltaAngle != 0) {
 
             telemetry.addData("currentAngle", getAngle());
             telemetry.addData("beforeAngle", beforeAngle);
@@ -287,7 +287,4 @@ public class IMUDriveMecanum {
         }
 
     }
-
-
-
 }

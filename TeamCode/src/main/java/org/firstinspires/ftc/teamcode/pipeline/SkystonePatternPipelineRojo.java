@@ -115,7 +115,7 @@ public class SkystonePatternPipelineRojo extends OpenCvPipeline {
         Imgproc.circle(all, pointLeft,5, new Scalar( 255, 0, 0 ),1 );//draws circle
         Imgproc.circle(all, pointRight,5, new Scalar( 255, 0, 0 ),1 );//draws circle
 
-        //draw 3 rectangles
+        //draw 2 rectangles
         Imgproc.rectangle(//1-3
                 all,
                 new Point(
