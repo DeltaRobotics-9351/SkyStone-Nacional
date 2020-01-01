@@ -167,7 +167,9 @@ public class IMUDriveMecanum {
 
         while(System.currentTimeMillis() < finalMillis && opMode.opModeIsActive()){
 
-            double frontleft = power, frontright = -power, backleft = -power, backright = power;
+            double frontleft = -power, frontright = -power, backleft = -power, backright = power;
+
+            hdw.allWheelsForward();
 
             if(getAngle() < initialAngle){
                 double deltaAngle = calculateDeltaAngles(initialAngle, getAngle());
@@ -175,7 +177,7 @@ public class IMUDriveMecanum {
                 double counteractConstant = 0.07;
                 double counteractValue = deltaAngle * counteractConstant;
 
-                frontleft = power / counteractValue;
+                frontleft = -power / counteractValue;
                 frontright = -power;
                 backleft = -power / counteractValue;
                 backright = power;
@@ -194,7 +196,7 @@ public class IMUDriveMecanum {
                 double counteractConstant = 0.2;
                 double counteractValue = deltaAngle * counteractConstant;
 
-                frontleft = power;
+                frontleft = -power;
                 frontright = -power / counteractValue;
                 backleft = -power;
                 backright = power / counteractValue;
@@ -208,7 +210,7 @@ public class IMUDriveMecanum {
                 telemetry.update();
 
             }else{
-                frontleft = power;
+                frontleft = -power;
                 frontright = -power;
                 backleft = -power;
                 backright = power;
@@ -230,6 +232,8 @@ public class IMUDriveMecanum {
         telemetry.addData("backleft", 0);
         telemetry.addData("backright", 0);
         telemetry.update();
+
+        hdw.defaultWheelsDirection();
 
     }
 
