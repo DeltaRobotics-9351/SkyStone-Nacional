@@ -1,11 +1,11 @@
-package org.firstinspires.ftc.teamcode.teleop;
+package org.firstinspires.ftc.team9351.teleop;
 
 import com.github.deltarobotics9351.deltadrive.drive.mecanum.JoystickDriveMecanum;
 import com.github.deltarobotics9351.deltadrive.hardware.DeltaHardware;
 import com.github.deltarobotics9351.deltadrive.utils.ChassisType;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.util.Range;
-import org.firstinspires.ftc.teamcode.hardware.Hardware;
+
+import org.firstinspires.ftc.team9351.hardware.Hardware;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="TeleOp Antiguo", group="TeleOps") //se define que la clase se trata de un teleop con una annotation
 public class TeleOp_Antiguo extends LinearOpMode { //la clase extendera a otra llamada 'LinearOpMode'

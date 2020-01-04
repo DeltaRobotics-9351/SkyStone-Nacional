@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.autonomous;
+package org.firstinspires.ftc.team9351.autonomous;
 
 
 import com.github.deltarobotics9351.deltadrive.drive.mecanum.IMUDriveMecanum;
@@ -8,8 +8,8 @@ import com.github.deltarobotics9351.deltadrive.utils.ChassisType;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.pipeline.SkystonePatternPipelineRojo;
-import org.firstinspires.ftc.teamcode.hardware.Hardware;
+import org.firstinspires.ftc.team9351.pipeline.SkystonePatternPipelineRojo;
+import org.firstinspires.ftc.team9351.hardware.Hardware;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;

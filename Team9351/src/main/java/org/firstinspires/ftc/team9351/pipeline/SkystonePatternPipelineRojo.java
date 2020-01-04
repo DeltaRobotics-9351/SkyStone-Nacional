@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.pipeline;
+package org.firstinspires.ftc.team9351.pipeline;
 
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -11,7 +11,7 @@ import org.openftc.easyopencv.OpenCvPipeline;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SkystonePatternPipelineAzul extends OpenCvPipeline {
+public class SkystonePatternPipelineRojo extends OpenCvPipeline {
 
     //el funcionamiento de esta pipeline consiste en detectar las dos ultimas stones de la derecha de
     //el quarry y determinar con estas el pattern, y a partir de este pattern seguir instrucciones
@@ -29,7 +29,6 @@ public class SkystonePatternPipelineAzul extends OpenCvPipeline {
 
     private static final float rectanguloIzquierdoY = 5.3f;
     private static final float rectanguloDerechoY = 5.3f;
-
 
     //en teoria no hay necesidad de tocar nada a partir de aqui.
     public static int valLeft = -1;
@@ -72,9 +71,9 @@ public class SkystonePatternPipelineAzul extends OpenCvPipeline {
     public void definePattern(){
         if(valLeft == 255 && valRight == 255){
             pattern = 1;
-        }else if(valLeft == 255 && valRight == 0){
-            pattern = 2;
         }else if(valLeft == 0 && valRight == 255){
+            pattern = 2;
+        }else if(valLeft == 255 && valRight == 0){
             pattern = 3;
         }else{
             pattern = 0; // desconocido, se posiciono de forma erronea el robot.
@@ -115,7 +114,7 @@ public class SkystonePatternPipelineAzul extends OpenCvPipeline {
         Imgproc.circle(all, pointLeft,5, new Scalar( 255, 0, 0 ),1 );//draws circle
         Imgproc.circle(all, pointRight,5, new Scalar( 255, 0, 0 ),1 );//draws circle
 
-        //draw 3 rectangles
+        //draw 2 rectangles
         Imgproc.rectangle(//1-3
                 all,
                 new Point(

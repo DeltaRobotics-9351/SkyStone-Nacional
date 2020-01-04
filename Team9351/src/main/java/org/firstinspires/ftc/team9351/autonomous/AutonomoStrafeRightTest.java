@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.autonomous;
+package org.firstinspires.ftc.team9351.autonomous;
 
 
 import com.github.deltarobotics9351.deltadrive.hardware.DeltaHardware;
@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.hardware.Hardware;
+import org.firstinspires.ftc.team9351.hardware.Hardware;
 import com.github.deltarobotics9351.deltadrive.drive.mecanum.IMUDriveMecanum;
 
 @Disabled
