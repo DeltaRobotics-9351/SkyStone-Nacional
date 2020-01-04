@@ -53,7 +53,6 @@ public class Hardware {
         servoStoneAutonomous = hwMap.servo.get("FS");
         servoCapstone = hwMap.servo.get("SC");
 
-
         //La direccion por default de estos motores sera FORWARD
         wheelFrontLeft.setDirection(DcMotor.Direction.FORWARD);
         motorIntakeRight.setDirection(DcMotor.Direction.FORWARD);
@@ -74,7 +73,8 @@ public class Hardware {
         motorSliders.setPower(0);
 
         //estos motores frenaran si su power es 0
-        
+        motorSliders.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         //se define la posicion por default de estos servos
         servoStoneAutonomous.setPosition(0);
         servoCapstone.setPosition(1);

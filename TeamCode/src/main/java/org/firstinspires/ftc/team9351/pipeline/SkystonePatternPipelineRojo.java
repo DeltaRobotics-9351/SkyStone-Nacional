@@ -30,7 +30,6 @@ public class SkystonePatternPipelineRojo extends OpenCvPipeline {
     private static final float rectanguloIzquierdoY = 5.3f;
     private static final float rectanguloDerechoY = 5.3f;
 
-
     //en teoria no hay necesidad de tocar nada a partir de aqui.
     public static int valLeft = -1;
     public static int valRight = -1;

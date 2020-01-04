@@ -1,10 +1,11 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
+import com.github.deltarobotics9351.deltadrive.drive.mecanum.JoystickDriveMecanum;
+import com.github.deltarobotics9351.deltadrive.hardware.DeltaHardware;
+import com.github.deltarobotics9351.deltadrive.utils.ChassisType;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.Range;
-
 import org.firstinspires.ftc.teamcode.hardware.Hardware;
-import org.firstinspires.ftc.teamcode.hardware.MecanumWheels;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="TeleOp Antiguo", group="TeleOps") //se define que la clase se trata de un teleop con una annotation
 public class TeleOp_Antiguo extends LinearOpMode { //la clase extendera a otra llamada 'LinearOpMode'
@@ -15,14 +16,17 @@ public class TeleOp_Antiguo extends LinearOpMode { //la clase extendera a otra l
     long runmillis;
     long disappearmillis;
 
-    MecanumWheels mecanumWheels; //en este objeto se contiene el codigo para las llantas mecanum
+    JoystickDriveMecanum mecanumWheels; //en este objeto se contiene el codigo para las llantas mecanum
+    DeltaHardware deltaHardware;
 
     @Override
     public void runOpMode(){
         hdw = new Hardware(hardwareMap); //init hardware
         hdw.initHardware(false);
 
-        mecanumWheels = new MecanumWheels(hdw);
+        deltaHardware = new DeltaHardware(hardwareMap, hdw.wheelFrontLeft, hdw.wheelFrontRight, hdw.wheelBackLeft, hdw.wheelBackRight, ChassisType.mecanum);
+
+        mecanumWheels = new JoystickDriveMecanum(deltaHardware);
 
         telemetry.addData("[>]", "All set?"); //manda un mensaje a la driver station
         telemetry.update();

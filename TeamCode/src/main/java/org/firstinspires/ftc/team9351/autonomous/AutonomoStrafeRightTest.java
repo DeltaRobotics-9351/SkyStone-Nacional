@@ -1,12 +1,14 @@
 package org.firstinspires.ftc.teamcode.autonomous;
 
 
+import com.github.deltarobotics9351.deltadrive.hardware.DeltaHardware;
+import com.github.deltarobotics9351.deltadrive.utils.ChassisType;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.hardware.Hardware;
-import org.firstinspires.ftc.teamcode.hardware.IMUDriveMecanum;
+import com.github.deltarobotics9351.deltadrive.drive.mecanum.IMUDriveMecanum;
 
 @Disabled
 @Autonomous(name="Autonomo Strafe Right Test", group="TEST")
@@ -17,12 +19,17 @@ public class AutonomoStrafeRightTest extends LinearOpMode {
                                         //el movimiento de las llantas mecanum con tiempo para
                                         //mantener el codigo mas organizado y facil de cambiar.
 
+    private DeltaHardware deltaHardware;
+
     @Override
     public void runOpMode() {
         hdw = new Hardware(hardwareMap); //creamos el hardware
         hdw.initHardware(false); //lo inicializamos
 
-        imuDrive = new IMUDriveMecanum(hdw, telemetry, this);
+        deltaHardware = new DeltaHardware(hardwareMap, hdw.wheelFrontLeft, hdw.wheelFrontRight, hdw.wheelBackLeft, hdw.wheelBackRight, ChassisType.mecanum);
+
+
+        imuDrive = new IMUDriveMecanum(deltaHardware, telemetry, this);
         imuDrive.initIMU();
 
         telemetry.addData("[/!\\]", "Calibrando el sensor IMU, espera...");

@@ -1,11 +1,13 @@
 package org.firstinspires.ftc.teamcode.autonomous;
 
 
+import com.github.deltarobotics9351.deltadrive.drive.mecanum.IMUDriveMecanum;
+import com.github.deltarobotics9351.deltadrive.drive.mecanum.TimeDriveMecanum;
+import com.github.deltarobotics9351.deltadrive.hardware.DeltaHardware;
+import com.github.deltarobotics9351.deltadrive.utils.ChassisType;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.hardware.IMUDriveMecanum;
-import org.firstinspires.ftc.teamcode.hardware.TimeDriveMecanum;
 import org.firstinspires.ftc.teamcode.pipeline.SkystonePatternPipelineRojo;
 import org.firstinspires.ftc.teamcode.hardware.Hardware;
 import org.openftc.easyopencv.OpenCvCamera;
@@ -23,6 +25,9 @@ public class AutonomoSkystoneRojo extends LinearOpMode {
     //el movimiento de las llantas mecanum con tiempo para
     //mantener el codigo mas organizado y facil de cambiar.
     private IMUDriveMecanum imuTurn;
+
+    private DeltaHardware deltaHardware;
+
     int pattern = 0;
 
     @Override
@@ -30,9 +35,11 @@ public class AutonomoSkystoneRojo extends LinearOpMode {
         hdw = new Hardware(hardwareMap); //creamos el hardware
         hdw.initHardware(false); //lo inicializamos
 
-        imuTurn = new IMUDriveMecanum(hdw, telemetry, this);
-        timeDrive = new TimeDriveMecanum(hdw, telemetry); //el objeto necesita el hardware para definir el power
-        //a los motores y el telemetry para mandar mensajes.
+        deltaHardware = new DeltaHardware(hardwareMap, hdw.wheelFrontLeft, hdw.wheelFrontRight, hdw.wheelBackLeft, hdw.wheelBackRight, ChassisType.mecanum);
+
+        imuTurn = new IMUDriveMecanum(deltaHardware, telemetry, this);
+        timeDrive = new TimeDriveMecanum(deltaHardware, telemetry); //el objeto necesita el hardware para definir el power
+                                                                    //a los motores y el telemetry para mandar mensajes.
 
         imuTurn.initIMU();
 
