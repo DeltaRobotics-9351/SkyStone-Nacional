@@ -85,6 +85,8 @@ android {
             ndk {
                 abiFilters "armeabi-v7a"
             }
+            ext.enableCrashlytics = false
+            ext.alwaysUpdateBuildId = false
         }
     }
 

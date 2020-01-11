@@ -5,6 +5,7 @@ import com.github.deltarobotics9351.deltadrive.hardware.DeltaHardware;
 import com.github.deltarobotics9351.deltadrive.utils.ChassisType;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.team9351.MotivateTelemetry;
 import org.firstinspires.ftc.team9351.hardware.Hardware;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="TeleOp Antiguo", group="TeleOps") //se define que la clase se trata de un teleop con una annotation
@@ -28,7 +29,8 @@ public class TeleOp_Antiguo extends LinearOpMode { //la clase extendera a otra l
 
         mecanumWheels = new JoystickDriveMecanum(deltaHardware);
 
-        telemetry.addData("[>]", "All set?"); //manda un mensaje a la driver station
+        MotivateTelemetry.doMotivateRed(telemetry);
+
         telemetry.update();
 
         waitForStart(); //espera hasta que se presione <play> en la driver station

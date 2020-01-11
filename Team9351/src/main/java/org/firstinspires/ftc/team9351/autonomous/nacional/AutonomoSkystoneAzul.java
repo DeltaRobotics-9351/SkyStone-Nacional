@@ -1,13 +1,15 @@
-package org.firstinspires.ftc.team9351.autonomous;
+package org.firstinspires.ftc.team9351.autonomous.nacional;
 
-
-import com.github.deltarobotics9351.deltadrive.drive.mecanum.IMUDriveMecanum;
 import com.github.deltarobotics9351.deltadrive.drive.mecanum.TimeDriveMecanum;
+
 import com.github.deltarobotics9351.deltadrive.hardware.DeltaHardware;
+import com.github.deltarobotics9351.deltadrive.drive.mecanum.IMUDriveMecanum;
 import com.github.deltarobotics9351.deltadrive.utils.ChassisType;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.firstinspires.ftc.team9351.MotivateTelemetry;
 import org.firstinspires.ftc.team9351.hardware.Hardware;
 import org.firstinspires.ftc.team9351.pipeline.SkystonePatternPipelineAzul;
 import org.openftc.easyopencv.OpenCvCamera;
@@ -38,20 +40,22 @@ public class AutonomoSkystoneAzul extends LinearOpMode {
 
         imuTurn = new IMUDriveMecanum(deltaHardware, telemetry, this);
         timeDrive = new TimeDriveMecanum(deltaHardware, telemetry); //el objeto necesita el hardware para definir el power
-                                                          //a los motores y el telemetry para mandar mensajes.
-
+                                                                    //a los motores y el telemetry para mandar mensajes.
         imuTurn.initIMU();
 
-        telemetry.addData("[/!\\]", "Calibrando el sensor IMU, espera...");
-        telemetry.update();
-
-        imuTurn.waitForIMUCalibration();
+        while(!imuTurn.isIMUCalibrated() && isStopRequested()){
+            telemetry.addData("[/!\\]", "Calibrando el sensor IMU, espera...");
+            telemetry.addData("[Status]", imuTurn.getIMUCalibrationStatus());
+            telemetry.update();
+        }
 
         //obtenemos la id del monitor de la camara (la vista de la camara que se vera desde el robot controller)
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
 
         //creamos la camara de OpenCV
         phoneCam = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
+
+        //ola shavales
 
         //la inicializamos
         phoneCam.openCameraDevice();
@@ -64,7 +68,10 @@ public class AutonomoSkystoneAzul extends LinearOpMode {
 
         phoneCam.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
 
-        telemetry.addData("[/!\\]", "Recuerden posicionar correctamente el robot, con los dos rectangulos que se ven en la camara apuntando justo hacia las dos ultimas stones de la quarry (las mas cercanas a el skybridge)\n\nGOOO DELTA ROBOTICS!!!");
+        telemetry.addData("[/!\\]", "Recuerden posicionar correctamente el robot, con los dos rectangulos que se ven en la camara apuntando justo hacia las dos ultimas stones de la quarry (las mas cercanas a el skybridge)");
+
+        MotivateTelemetry.doMotivateBlue(telemetry);
+
         telemetry.update();
 
         //esperamos que el usuario presione <play> en la driver station

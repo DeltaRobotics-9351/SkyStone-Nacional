@@ -1,13 +1,15 @@
-package org.firstinspires.ftc.team9351.autonomous;
-
+package org.firstinspires.ftc.team9351.autonomous.nacional;
 
 import com.github.deltarobotics9351.deltadrive.drive.mecanum.IMUDriveMecanum;
 import com.github.deltarobotics9351.deltadrive.drive.mecanum.TimeDriveMecanum;
 import com.github.deltarobotics9351.deltadrive.hardware.DeltaHardware;
 import com.github.deltarobotics9351.deltadrive.utils.ChassisType;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.firstinspires.ftc.team9351.MotivateTelemetry;
 import org.firstinspires.ftc.team9351.pipeline.SkystonePatternPipelineRojo;
 import org.firstinspires.ftc.team9351.hardware.Hardware;
 import org.openftc.easyopencv.OpenCvCamera;
@@ -43,10 +45,11 @@ public class AutonomoSkystoneRojo extends LinearOpMode {
 
         imuTurn.initIMU();
 
-        telemetry.addData("[/!\\]", "Calibrando el sensor IMU, espera...");
-        telemetry.update();
-
-        imuTurn.waitForIMUCalibration();
+        while(!imuTurn.isIMUCalibrated() && !isStopRequested()){
+            telemetry.addData("[/!\\]", "Calibrando el sensor IMU, espera...");
+            telemetry.addData("[Status]", imuTurn.getIMUCalibrationStatus());
+            telemetry.update();
+        }
 
         //obtenemos la id del monitor de la camara (la vista de la camara que se vera desde el robot controller)
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
@@ -65,7 +68,10 @@ public class AutonomoSkystoneRojo extends LinearOpMode {
 
         phoneCam.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
 
-        telemetry.addData("[/!\\]", "Recuerden posicionar correctamente el robot, con los dos rectangulos que se ven en la camara apuntando justo hacia las dos ultimas stones de la quarry (las mas cercanas a el skybridge)\n\nGOOO DELTA ROBOTICS!!!");
+        telemetry.addData("[/!\\]", "Recuerden posicionar correctamente el robot, con los dos rectangulos que se ven en la camara apuntando justo hacia las dos ultimas stones de la quarry (las mas cercanas a el skybridge)");
+
+        MotivateTelemetry.doMotivateRed(telemetry);
+
         telemetry.update();
 
         //esperamos que el usuario presione <play> en la driver station
@@ -89,51 +95,59 @@ public class AutonomoSkystoneRojo extends LinearOpMode {
         telemetry.addData("Pattern", pattern); //mandamos mensaje telemetry para reportar que ya se detecto un patron
         telemetry.update();
 
-        sleep(2000);
+        sleep(1000);
 
-        if(pattern == 1){
+        if(pattern == 1) {
 
-            timeDrive.strafeRight(0.6, 0.5);
+            imuTurn.rotate(10, 0.4);
 
-            sleep(500);
+            timeDrive.backwards(0.4, 1.4);
 
-            timeDrive.backwards(0.6,0.9);
-
-            sleep((long)100);
+            sleep((long) 100);
             hdw.servoStoneAutonomous.setPosition(0.5f);
-            sleep((long)1000);
+            sleep((long) 1000);
+
+            imuTurn.rotate(-10, 0.4);
+
+            //A Pato le gusta sobastian chiquito bb
 
             timeDrive.forward(0.6,0.6);
             sleep((long)1000);
-            imuTurn.rotate(-55, 0.5);
-            timeDrive.backwards(0.6,1.7);
+            imuTurn.rotate(-90, 0.4);
+            timeDrive.backwards(0.6,1.6);
 
             hdw.servoStoneAutonomous.setPosition(0);
             sleep((long)1000);
 
-            timeDrive.forward(0.6, 2.1);
+            timeDrive.forward(0.6, 2.3);
             sleep((long)1000);
-            imuTurn.rotate(55, 0.5);
-            timeDrive.backwards(0.6,0.9);
+            imuTurn.rotate(90, 0.4);
+            timeDrive.backwards(0.4,1.3);
 
             sleep((long)100);
             hdw.servoStoneAutonomous.setPosition(0.5f);
             sleep((long)1000);
-
-            timeDrive.forward(0.6,0.6);
+            timeDrive.forward(0.6,0.7);
             sleep((long)1000);
-            imuTurn.rotate(-55, 0.5);
-            timeDrive.backwards(0.6,1.9);
+            imuTurn.rotate(-90, 0.4);
+            timeDrive.backwards(0.6,2.4);
 
             sleep((long)1000);
             hdw.servoStoneAutonomous.setPosition(0);
             sleep((long)1000);
 
-            timeDrive.forward(0.6,0.4);
+            //Que es esto?
+            timeDrive.forward(0.6,0.5);
+
+            sleep((long)500);
+            hdw.servoStoneAutonomous.setPosition(0.5f);
+
+            //sebas no me quiere enseñar a programar
 
         }else if(pattern == 2){
 
-            timeDrive.backwards(0.6,0.9);
+            // Sebas es un puto dios de la sensualidad y tambien es masoquista y le gusta que lo azoten
+            timeDrive.backwards(0.4,1.2);
 
             sleep((long)100);
             hdw.servoStoneAutonomous.setPosition(0.5f);
@@ -141,72 +155,84 @@ public class AutonomoSkystoneRojo extends LinearOpMode {
 
             timeDrive.forward(0.6,0.6);
             sleep((long)1000);
-            imuTurn.rotate(-55, 0.5);
-            timeDrive.backwards(0.6,1.7);
-
-            hdw.servoStoneAutonomous.setPosition(0);
-            sleep((long)1000);
-
-            timeDrive.forward(0.6, 2.2);
-            sleep((long)1000);
-            imuTurn.rotate(55, 0.5);
-            timeDrive.backwards(0.6,0.9);
-
-            sleep((long)100);
-            hdw.servoStoneAutonomous.setPosition(0.5f);
-            sleep((long)1000);
-
-            timeDrive.forward(0.6,0.9);
-            sleep((long)1000);
-            imuTurn.rotate(-55, 0.5);
-            timeDrive.backwards(0.6,1.9);
-
-            sleep((long)1000);
-            hdw.servoStoneAutonomous.setPosition(0);
-            sleep((long)1000);
-
-            timeDrive.forward(0.6,0.4);
-
-        }else if(pattern == 3){
-
-            timeDrive.strafeLeft(0.4, 0.6);
-
-            sleep(700);
-
-            timeDrive.backwards(0.6,1.1);
-
-            sleep((long)100);
-            hdw.servoStoneAutonomous.setPosition(0.5f);
-            sleep((long)1000);
-
-            timeDrive.forward(0.6,0.6);
-            sleep((long)1000);
-            imuTurn.rotate(-55, 0.4);
+            imuTurn.rotate(-90, 0.4);
             timeDrive.backwards(0.6,1.4);
 
             hdw.servoStoneAutonomous.setPosition(0);
             sleep((long)1000);
 
-            timeDrive.forward(0.6, 2.2);
+            timeDrive.forward(0.6, 2.5);
             sleep((long)1000);
-            imuTurn.rotate(55, 0.3);
-            timeDrive.backwards(0.6,0.9);
+            imuTurn.rotate(90, 0.4);
+            timeDrive.backwards(0.4,1.2);
 
             sleep((long)100);
             hdw.servoStoneAutonomous.setPosition(0.5f);
             sleep((long)1000);
 
-            timeDrive.forward(0.6,1.2);
+            //ayuda sebas me esclaviza para que programe por el y despues toma el credito
+
+            timeDrive.forward(0.6,0.9);
             sleep((long)1000);
-            imuTurn.rotate(-55, 0.3);
-            timeDrive.backwards(0.6,1.9);
+            imuTurn.rotate(-90, 0.4);
+            timeDrive.backwards(0.6,2.4);
 
             sleep((long)1000);
             hdw.servoStoneAutonomous.setPosition(0);
             sleep((long)1000);
 
-            timeDrive.forward(0.6,0.3);
+            //Que es esto?
+            timeDrive.forward(0.6,0.5);
 
+            sleep((long)500);
+            hdw.servoStoneAutonomous.setPosition(0.5f);
+
+        }else if(pattern == 3){
+
+            imuTurn.rotate(-10, 0.4);
+
+            timeDrive.backwards(0.4,1.3);
+
+            sleep((long)100);
+            hdw.servoStoneAutonomous.setPosition(0.5f);
+            sleep((long)1000);
+
+            imuTurn.rotate(10, 0.4);
+
+            timeDrive.forward(0.6,0.6);
+            sleep((long)1000);
+            imuTurn.rotate(-90, 0.4);
+            timeDrive.backwards(0.6,1.5);
+
+            hdw.servoStoneAutonomous.setPosition(0);
+            sleep((long)1000);
+
+            timeDrive.forward(0.6, 2.3);
+            sleep((long)1000);
+            imuTurn.rotate(75, 0.4);
+            timeDrive.backwards(0.4,1.2);
+            imuTurn.rotate(15, 0.4);
+
+            timeDrive.backwards(0.4,0.3);
+
+            sleep((long)100);
+            hdw.servoStoneAutonomous.setPosition(0.5f);
+            sleep((long)1000);
+
+            timeDrive.forward(0.6,0.7);
+            sleep((long)1000);
+            imuTurn.rotate(-90, 0.4);
+            timeDrive.backwards(0.6,2.2);
+
+            sleep((long)1000);
+            hdw.servoStoneAutonomous.setPosition(0);
+            sleep((long)1000);
+
+            //Que es esto?
+            timeDrive.forward(0.6,0.5);
+
+            sleep((long)500);
+            hdw.servoStoneAutonomous.setPosition(0.5f);
         }else{
             //en teoria este codigo nunca se deberia de ejecutar, pero por si las dudas...
             telemetry.addData("[ERROR]", "No se que ha pasado ni como has llegado hasta aqui. Lo siento =(");
