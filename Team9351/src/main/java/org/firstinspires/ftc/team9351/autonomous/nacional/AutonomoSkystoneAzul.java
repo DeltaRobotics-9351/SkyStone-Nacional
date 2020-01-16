@@ -1,32 +1,34 @@
 package org.firstinspires.ftc.team9351.autonomous.nacional;
 
-import com.github.deltarobotics9351.deltadrive.drive.mecanum.TimeDriveMecanum;
-
-import com.github.deltarobotics9351.deltadrive.hardware.DeltaHardware;
 import com.github.deltarobotics9351.deltadrive.drive.mecanum.IMUDriveMecanum;
+import com.github.deltarobotics9351.deltadrive.drive.mecanum.TimeDriveMecanum;
+import com.github.deltarobotics9351.deltadrive.hardware.DeltaHardware;
+import com.github.deltarobotics9351.deltadrive.parameters.IMUDriveParameters;
 import com.github.deltarobotics9351.deltadrive.utils.ChassisType;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.team9351.MotivateTelemetry;
+import org.firstinspires.ftc.team9351.pipeline.SkystonePatternPipelineRojo;
 import org.firstinspires.ftc.team9351.hardware.Hardware;
-import org.firstinspires.ftc.team9351.pipeline.SkystonePatternPipelineAzul;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvInternalCamera;
 
-@Autonomous(name="Autonomo Skystone Azul", group="Final")
-public class AutonomoSkystoneAzul extends LinearOpMode {
+@Autonomous(name="Autonomo Skystone Rojo", group="Final")
+public class AutonomoSkystoneRojo extends LinearOpMode {
 
     private OpenCvCamera phoneCam;
-    private SkystonePatternPipelineAzul patternPipeline;
+    private SkystonePatternPipelineRojo patternPipeline;
     private Hardware hdw;
-    private TimeDriveMecanum timeDrive; //en este objeto se encuentran todas las funciones para
-                                        //el movimiento de las llantas mecanum con tiempo para
-                                        //mantener el codigo mas organizado y facil de cambiar.
+
+    private TimeDriveMecanum timeDrive;
+
     private IMUDriveMecanum imuTurn;
+
     private DeltaHardware deltaHardware;
 
     int pattern = 0;
@@ -38,12 +40,17 @@ public class AutonomoSkystoneAzul extends LinearOpMode {
 
         deltaHardware = new DeltaHardware(hardwareMap, hdw.wheelFrontLeft, hdw.wheelFrontRight, hdw.wheelBackLeft, hdw.wheelBackRight, ChassisType.mecanum);
 
-        imuTurn = new IMUDriveMecanum(deltaHardware, telemetry, this);
+        imuTurn = new IMUDriveMecanum(deltaHardware, this);
         timeDrive = new TimeDriveMecanum(deltaHardware, telemetry); //el objeto necesita el hardware para definir el power
                                                                     //a los motores y el telemetry para mandar mensajes.
-        imuTurn.initIMU();
 
-        while(!imuTurn.isIMUCalibrated() && isStopRequested()){
+        IMUDriveParameters parameters = new IMUDriveParameters();
+        parameters.ROTATE_CORRECTION_POWER = 0.15;
+        parameters.ROTATE_MAX_CORRECTION_TIMES = 3;
+
+        imuTurn.initIMU(parameters);
+
+        while(!imuTurn.isIMUCalibrated() && !isStopRequested()){
             telemetry.addData("[/!\\]", "Calibrando el sensor IMU, espera...");
             telemetry.addData("[Status]", imuTurn.getIMUCalibrationStatus());
             telemetry.update();
@@ -55,13 +62,11 @@ public class AutonomoSkystoneAzul extends LinearOpMode {
         //creamos la camara de OpenCV
         phoneCam = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
 
-        //ola shavales
-
         //la inicializamos
         phoneCam.openCameraDevice();
 
         //creamos la pipeline
-        patternPipeline = new SkystonePatternPipelineAzul();
+        patternPipeline = new SkystonePatternPipelineRojo();
 
         //definimos la pipeline para la camara
         phoneCam.setPipeline(patternPipeline);
@@ -70,7 +75,7 @@ public class AutonomoSkystoneAzul extends LinearOpMode {
 
         telemetry.addData("[/!\\]", "Recuerden posicionar correctamente el robot, con los dos rectangulos que se ven en la camara apuntando justo hacia las dos ultimas stones de la quarry (las mas cercanas a el skybridge)");
 
-        MotivateTelemetry.doMotivateBlue(telemetry);
+        MotivateTelemetry.doMotivateRed(telemetry);
 
         telemetry.update();
 
@@ -95,32 +100,56 @@ public class AutonomoSkystoneAzul extends LinearOpMode {
         telemetry.addData("Pattern", pattern); //mandamos mensaje telemetry para reportar que ya se detecto un patron
         telemetry.update();
 
-        sleep(2000);
+        //sleep(1000);
 
-        if(pattern == 2){ //este falta el ultimo skystone
+        if(pattern == 1) {
 
-            timeDrive.strafeLeft(0.6, 0.8);
+            imuTurn.rotate(10, 0.4);
 
-            sleep(500);
+            timeDrive.backwards(0.4, 1.4);
 
-            timeDrive.backwards(0.6,0.9);
-
-            sleep((long)100);
+            sleep((long) 100);
             hdw.servoStoneAutonomous.setPosition(0.5f);
-            sleep((long)1000);
+            sleep((long) 1000);
+
+            imuTurn.rotate(-10, 0.4);
 
             timeDrive.forward(0.6,0.6);
             sleep((long)1000);
-            imuTurn.rotate(55, 0.5);
+            imuTurn.rotate(-90, 0.4);
             timeDrive.backwards(0.6,1.7);
 
             hdw.servoStoneAutonomous.setPosition(0);
             sleep((long)1000);
 
-            timeDrive.forward(0.6, 2.6); //hacia el ultimo skystone
+            timeDrive.forward(0.6, 2);
             sleep((long)1000);
-            imuTurn.rotate(-55, 0.5);
-            timeDrive.backwards(0.6,0.9);
+            imuTurn.rotate(90, 0.4);
+            timeDrive.backwards(0.4,1.2);
+
+            sleep((long)100);
+            hdw.servoStoneAutonomous.setPosition(0.5f);
+            sleep((long)1000);
+            timeDrive.forward(0.6,0.7);
+            sleep((long)1000);
+            imuTurn.rotate(-90, 0.4);
+            timeDrive.backwards(0.6,2.2);
+
+            sleep((long)1000);
+            hdw.servoStoneAutonomous.setPosition(0);
+            sleep((long)1000);
+
+            //Que es esto?
+            timeDrive.forward(0.6,0.6);
+
+            sleep((long)500);
+            hdw.servoStoneAutonomous.setPosition(0.5f);
+
+            //sebas no me quiere enseñar a programar
+
+        }else if(pattern == 2){
+
+            timeDrive.backwards(0.4,1.2);
 
             sleep((long)100);
             hdw.servoStoneAutonomous.setPosition(0.5f);
@@ -128,103 +157,84 @@ public class AutonomoSkystoneAzul extends LinearOpMode {
 
             timeDrive.forward(0.6,0.6);
             sleep((long)1000);
-            imuTurn.rotate(55, 0.5);
-            timeDrive.backwards(0.6,1.9);
-
-            sleep((long)1000);
-            hdw.servoStoneAutonomous.setPosition(0);
-            sleep((long)1000);
-
-            timeDrive.forward(0.6,0.4);
-
-            sleep((long)100);
-            hdw.servoStoneAutonomous.setPosition(0.5f);
-            sleep((long)1000);
-
-        }else if(pattern == 3){ //este ya esta
-
-            timeDrive.backwards(0.6,0.9);
-
-            sleep((long)100);
-            hdw.servoStoneAutonomous.setPosition(0.5f);
-            sleep((long)1000);
-
-            timeDrive.forward(0.6,0.6);
-            sleep((long)1000);
-            imuTurn.rotate(55, 0.5);
-            timeDrive.backwards(0.6,1.7);
+            imuTurn.rotate(-90, 0.4);
+            timeDrive.backwards(0.6,1.6);
 
             hdw.servoStoneAutonomous.setPosition(0);
             sleep((long)1000);
 
-            timeDrive.forward(0.6, 2.4); //hacia el ultimo skystone
+            timeDrive.forward(0.6, 2.5);
             sleep((long)1000);
-            imuTurn.rotate(-55, 0.5);
-            timeDrive.backwards(0.6,0.9);
+            imuTurn.rotate(90, 0.4);
+            timeDrive.backwards(0.4,1.2);
 
             sleep((long)100);
             hdw.servoStoneAutonomous.setPosition(0.5f);
             sleep((long)1000);
+
+            //ayuda sebas me esclaviza para que programe por el y despues toma el credito
 
             timeDrive.forward(0.6,0.9);
             sleep((long)1000);
-            imuTurn.rotate(55, 0.5);
-            timeDrive.backwards(0.6,2.1);
+            imuTurn.rotate(-90, 0.4);
+            timeDrive.backwards(0.6,2.2);
 
             sleep((long)1000);
             hdw.servoStoneAutonomous.setPosition(0);
             sleep((long)1000);
 
-            timeDrive.forward(0.6,0.3);
+            //Que es esto?
+            timeDrive.forward(0.6,0.8);
+
+            sleep((long)500);
+            hdw.servoStoneAutonomous.setPosition(0.5f);
+
+        }else if(pattern == 3){
+
+            imuTurn.rotate(-10, 0.4);
+
+            timeDrive.backwards(0.4,1.3);
 
             sleep((long)100);
             hdw.servoStoneAutonomous.setPosition(0.5f);
             sleep((long)1000);
 
-        }else if(pattern == 1){
-
-            timeDrive.strafeLeft(0.3, 1.1);
-
-            sleep(700);
-
-            timeDrive.backwards(0.6,1.1);
-
-            sleep((long)100);
-            hdw.servoStoneAutonomous.setPosition(0.5f);
-            sleep((long)1000);
+            imuTurn.rotate(10, 0.4);
 
             timeDrive.forward(0.6,0.6);
             sleep((long)1000);
-            imuTurn.rotate(55, 0.4);
-            timeDrive.backwards(0.6,1.4);
+            imuTurn.rotate(-90, 0.4);
+            timeDrive.backwards(0.6,1.5);
 
             hdw.servoStoneAutonomous.setPosition(0);
             sleep((long)1000);
 
-            timeDrive.forward(0.6, 2.25); //hacia el ultimo skystone
+            timeDrive.forward(0.6, 2.3);
             sleep((long)1000);
-            imuTurn.rotate(-55, 0.3);
-            timeDrive.backwards(0.6,0.9);
+            imuTurn.rotate(75, 0.4);
+            timeDrive.backwards(0.4,1.2);
+            imuTurn.rotate(15, 0.4);
+
+            timeDrive.backwards(0.4,0.3);
 
             sleep((long)100);
             hdw.servoStoneAutonomous.setPosition(0.5f);
             sleep((long)1000);
 
-            timeDrive.forward(0.6,1.2);
+            timeDrive.forward(0.6,0.7);
             sleep((long)1000);
-            imuTurn.rotate(55, 0.4);
-            timeDrive.backwards(0.6,1.9);
+            imuTurn.rotate(-90, 0.4);
+            timeDrive.backwards(0.6,2.2);
 
             sleep((long)1000);
             hdw.servoStoneAutonomous.setPosition(0);
             sleep((long)1000);
 
+            //Que es esto?
             timeDrive.forward(0.6,0.5);
 
-            sleep((long)100);
+            sleep((long)500);
             hdw.servoStoneAutonomous.setPosition(0.5f);
-            sleep((long)1000);
-
         }else{
             //en teoria este codigo nunca se deberia de ejecutar, pero por si las dudas...
             telemetry.addData("[ERROR]", "No se que ha pasado ni como has llegado hasta aqui. Lo siento =(");
