@@ -15,8 +15,8 @@ import com.github.deltarobotics9351.deltadrive.drive.mecanum.TimeDriveMecanum;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-@Autonomous(name="NA-Autonomo Foundation Rojo", group="Final")
-public class AutonomoFoundationRojo extends LinearOpMode {
+@Autonomous(name="NA-A-Autonomo Foundation Rojo", group="Final")
+public class AutonomoFoundationRojo_1 extends LinearOpMode {
 
     private Hardware hdw;
     private TimeDriveMecanum timeDrive; //en este objeto se encuentran todas las funciones para

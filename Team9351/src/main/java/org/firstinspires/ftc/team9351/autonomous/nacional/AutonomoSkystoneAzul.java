@@ -5,24 +5,23 @@ import com.github.deltarobotics9351.deltadrive.drive.mecanum.TimeDriveMecanum;
 import com.github.deltarobotics9351.deltadrive.hardware.DeltaHardware;
 import com.github.deltarobotics9351.deltadrive.parameters.IMUDriveParameters;
 import com.github.deltarobotics9351.deltadrive.utils.ChassisType;
-
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.team9351.MotivateTelemetry;
-import org.firstinspires.ftc.team9351.pipeline.SkystonePatternPipelineRojo;
 import org.firstinspires.ftc.team9351.hardware.Hardware;
+import org.firstinspires.ftc.team9351.pipeline.SkystonePatternPipelineAzul;
+import org.firstinspires.ftc.team9351.pipeline.SkystonePatternPipelineRojo;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvInternalCamera;
 
-@Autonomous(name="Autonomo Skystone Rojo", group="Final")
-public class AutonomoSkystoneRojo extends LinearOpMode {
+@Autonomous(name="Autonomo Skystone Azul", group="Final")
+public class AutonomoSkystoneAzul extends LinearOpMode {
 
     private OpenCvCamera phoneCam;
-    private SkystonePatternPipelineRojo patternPipeline;
+    private SkystonePatternPipelineAzul patternPipeline;
     private Hardware hdw;
 
     private TimeDriveMecanum timeDrive;
@@ -50,7 +49,7 @@ public class AutonomoSkystoneRojo extends LinearOpMode {
 
         imuTurn.initIMU(parameters);
 
-        while(!imuTurn.isIMUCalibrated() && !isStopRequested()){
+        while(!imuTurn.isIMUCalibrated() && opModeIsActive()){
             telemetry.addData("[/!\\]", "Calibrando el sensor IMU, espera...");
             telemetry.addData("[Status]", imuTurn.getIMUCalibrationStatus());
             telemetry.update();
@@ -66,30 +65,26 @@ public class AutonomoSkystoneRojo extends LinearOpMode {
         phoneCam.openCameraDevice();
 
         //creamos la pipeline
-        patternPipeline = new SkystonePatternPipelineRojo();
+        patternPipeline = new SkystonePatternPipelineAzul();
 
         //definimos la pipeline para la camara
         phoneCam.setPipeline(patternPipeline);
 
         phoneCam.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
 
-        telemetry.addData("[/!\\]", "Recuerden posicionar correctamente el robot, con los dos rectangulos que se ven en la camara apuntando justo hacia las dos ultimas stones de la quarry (las mas cercanas a el skybridge)");
-
-        MotivateTelemetry.doMotivateRed(telemetry);
-
-        telemetry.update();
+        while(!isStarted()){
+            telemetry.addData("[/!\\]", "Recuerden posicionar correctamente el robot, con los dos rectangulos que se ven en la camara apuntando justo hacia las dos ultimas stones de la quarry (las mas cercanas a el skybridge)\n\nGOOO DELTA ROBOTICS!!!\n");
+            telemetry.addData("Pattern", patternPipeline.pattern);
+            telemetry.update();
+        }
 
         //esperamos que el usuario presione <play> en la driver station
         waitForStart();
 
         //si el pattern es 0 (si es 0 significa que no ha detectado ningun pattern) simplemente nos estacionaremos debajo del skybridge
         if(patternPipeline.pattern == 0){
-            telemetry.addData("[ERROR]", "Se ha posicionado de forma erronea el robot... Me estacionare para al menos hacer algo =)");
+            telemetry.addData("[ERROR]", "Se ha posicionado de forma erronea el robot... ");
             telemetry.update();
-            timeDrive.backwards(0.6, 0.4);
-            timeDrive.turnLeft(0.6, 0.8);
-            sleep(1000);
-            timeDrive.backwards(0.6, 1);
             while(opModeIsActive());
         }
 
@@ -104,7 +99,7 @@ public class AutonomoSkystoneRojo extends LinearOpMode {
 
         if(pattern == 1) {
 
-            imuTurn.rotate(10, 0.4);
+            imuTurn.rotate(-10, 0.4);
 
             timeDrive.backwards(0.4, 1.4);
 
@@ -112,11 +107,11 @@ public class AutonomoSkystoneRojo extends LinearOpMode {
             hdw.servoStoneAutonomous.setPosition(0.5f);
             sleep((long) 1000);
 
-            imuTurn.rotate(-10, 0.4);
+            imuTurn.rotate(10, 0.4);
 
             timeDrive.forward(0.6,0.6);
             sleep((long)1000);
-            imuTurn.rotate(-90, 0.4);
+            imuTurn.rotate(90, 0.4);
             timeDrive.backwards(0.6,1.7);
 
             hdw.servoStoneAutonomous.setPosition(0);
@@ -124,7 +119,7 @@ public class AutonomoSkystoneRojo extends LinearOpMode {
 
             timeDrive.forward(0.6, 2);
             sleep((long)1000);
-            imuTurn.rotate(90, 0.4);
+            imuTurn.rotate(-90, 0.4);
             timeDrive.backwards(0.4,1.2);
 
             sleep((long)100);
@@ -132,7 +127,7 @@ public class AutonomoSkystoneRojo extends LinearOpMode {
             sleep((long)1000);
             timeDrive.forward(0.6,0.7);
             sleep((long)1000);
-            imuTurn.rotate(-90, 0.4);
+            imuTurn.rotate(90, 0.4);
             timeDrive.backwards(0.6,2.2);
 
             sleep((long)1000);
@@ -157,7 +152,7 @@ public class AutonomoSkystoneRojo extends LinearOpMode {
 
             timeDrive.forward(0.6,0.6);
             sleep((long)1000);
-            imuTurn.rotate(-90, 0.4);
+            imuTurn.rotate(90, 0.4);
             timeDrive.backwards(0.6,1.6);
 
             hdw.servoStoneAutonomous.setPosition(0);
@@ -165,9 +160,9 @@ public class AutonomoSkystoneRojo extends LinearOpMode {
 
             timeDrive.forward(0.6, 2.5);
             sleep((long)1000);
-            imuTurn.rotate(90, 0.4);
+            imuTurn.rotate(-90, 0.4);
             timeDrive.backwards(0.4,1.2);
-
+            //el que lea esto es tontito jaja
             sleep((long)100);
             hdw.servoStoneAutonomous.setPosition(0.5f);
             sleep((long)1000);
@@ -176,7 +171,7 @@ public class AutonomoSkystoneRojo extends LinearOpMode {
 
             timeDrive.forward(0.6,0.9);
             sleep((long)1000);
-            imuTurn.rotate(-90, 0.4);
+            imuTurn.rotate(90, 0.4);
             timeDrive.backwards(0.6,2.2);
 
             sleep((long)1000);
@@ -191,7 +186,7 @@ public class AutonomoSkystoneRojo extends LinearOpMode {
 
         }else if(pattern == 3){
 
-            imuTurn.rotate(-10, 0.4);
+            imuTurn.rotate(15, 0.4);
 
             timeDrive.backwards(0.4,1.3);
 
@@ -199,11 +194,11 @@ public class AutonomoSkystoneRojo extends LinearOpMode {
             hdw.servoStoneAutonomous.setPosition(0.5f);
             sleep((long)1000);
 
-            imuTurn.rotate(10, 0.4);
+            imuTurn.rotate(-15, 0.4);
 
             timeDrive.forward(0.6,0.6);
             sleep((long)1000);
-            imuTurn.rotate(-90, 0.4);
+            imuTurn.rotate(90, 0.4);
             timeDrive.backwards(0.6,1.5);
 
             hdw.servoStoneAutonomous.setPosition(0);
@@ -211,9 +206,8 @@ public class AutonomoSkystoneRojo extends LinearOpMode {
 
             timeDrive.forward(0.6, 2.3);
             sleep((long)1000);
-            imuTurn.rotate(75, 0.4);
+            imuTurn.rotate(-90, 0.4);
             timeDrive.backwards(0.4,1.2);
-            imuTurn.rotate(15, 0.4);
 
             timeDrive.backwards(0.4,0.3);
 
@@ -223,7 +217,7 @@ public class AutonomoSkystoneRojo extends LinearOpMode {
 
             timeDrive.forward(0.6,0.7);
             sleep((long)1000);
-            imuTurn.rotate(-90, 0.4);
+            imuTurn.rotate(90, 0.4);
             timeDrive.backwards(0.6,2.2);
 
             sleep((long)1000);

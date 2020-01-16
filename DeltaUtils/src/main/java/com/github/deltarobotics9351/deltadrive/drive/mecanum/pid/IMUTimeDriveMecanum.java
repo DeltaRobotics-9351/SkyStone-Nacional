@@ -31,9 +31,9 @@ public class IMUTimeDriveMecanum {
 
     PIDController pidRotate, pidStrafe, pidDrive;
 
-    public IMUTimeDriveMecanum(DeltaHardware hdw, Telemetry telemetry, LinearOpMode currentOpMode){
+    public IMUTimeDriveMecanum(DeltaHardware hdw, LinearOpMode currentOpMode){
         this.hdw = hdw;
-        this.telemetry = telemetry;
+        this.telemetry = currentOpMode.telemetry;
         this.currentOpMode = currentOpMode;
     }
 
@@ -119,6 +119,8 @@ public class IMUTimeDriveMecanum {
 
     public void rotate(double degrees, double power)
     {
+        if(!isIMUCalibrated()) return;
+
         // restart imu angle tracking.
         resetAngle();
 
@@ -197,6 +199,8 @@ public class IMUTimeDriveMecanum {
 
     public void strafeRight(double power, double timeSecs){
 
+        if(!isIMUCalibrated()) return;
+
         power = Math.abs(power);
 
         resetAngle();
@@ -248,6 +252,8 @@ public class IMUTimeDriveMecanum {
 
     public void strafeLeft(double power, double timeSecs){
 
+        if(!isIMUCalibrated()) return;
+
         power = Math.abs(power);
 
         resetAngle();
@@ -297,6 +303,9 @@ public class IMUTimeDriveMecanum {
     }
 
     public void forward(double power, double timeSecs){
+
+        if(!isIMUCalibrated()) return;
+
         power = Math.abs(power);
 
         resetAngle();
@@ -346,6 +355,8 @@ public class IMUTimeDriveMecanum {
     }
 
     public void backwards(double power, double timeSecs){
+        if(!isIMUCalibrated()) return;
+
         power = Math.abs(power);
 
         resetAngle();
@@ -395,10 +406,10 @@ public class IMUTimeDriveMecanum {
     }
 
     private void defineAllWheelPower(double frontleft, double frontright, double backleft, double backright){
-        hdw.wheelFrontLeft.setPower(-frontleft);
-        hdw.wheelFrontRight.setPower(-frontright);
-        hdw.wheelBackLeft.setPower(-backleft);
-        hdw.wheelBackRight.setPower(-backright);
+        hdw.wheelFrontLeft.setPower(frontleft);
+        hdw.wheelFrontRight.setPower(frontright);
+        hdw.wheelBackLeft.setPower(backleft);
+        hdw.wheelBackRight.setPower(backright);
     }
 
     public void sleep(long millis){

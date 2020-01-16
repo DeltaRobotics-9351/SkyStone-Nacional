@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.team9351.hardware.Hardware;
 import com.github.deltarobotics9351.deltadrive.drive.mecanum.TimeDriveMecanum;
 
-@Autonomous(name="REGIONAL-Autonomo Foundation Rojo", group="Final")
+@Autonomous(name="RE-Autonomo Foundation Rojo", group="Final")
 public class AutonomoFoundationRojo extends LinearOpMode {
 
     private Hardware hdw;
@@ -35,38 +35,38 @@ public class AutonomoFoundationRojo extends LinearOpMode {
         //esperamos que el usuario presione <play> en la driver station
         waitForStart();
 
-        timeDrive.strafeRight(0.5, 0.5); //nos deslizamos
+        timeDrive.strafeRight(0.25, 1); //nos deslizamos
 
-        timeDrive.forward(0.5, 0.2); //nos agitamos para bajar el intake
-        timeDrive.backwards(0.5, 0.2);
+        timeDrive.forward(0.6, 0.2); //nos agitamos para bajar el intake
+        timeDrive.backwards(0.6, 0.2);
 
         hdw.motorSliders.setPower(1); //subimos los sliders
         sleep(600);
         hdw.motorSliders.setPower(0);
 
-        timeDrive.forward(0.4,0.9); //avanzamos hacia la foundation
+        timeDrive.forward(0.6,0.9); //avanzamos hacia la foundation
 
         hdw.motorSliders.setPower(-1); //bajamos los sliders
         sleep(600);
         hdw.motorSliders.setPower(0);
         sleep(500);
 
-        timeDrive.backwards(0.5, 1.3); // vamos hacia atras para jalar la foundation
+        timeDrive.backwards(0.6, 1.3); // vamos hacia atras para jalar la foundation
 
-        hdw.motorSliders.setPower(1); //subimos los sliders
+        hdw.motorSliders.setPower(0.5); //subimos los sliders
         sleep(600);
         hdw.motorSliders.setPower(0);
 
         sleep(16000); //esperamos
 
-        timeDrive.strafeLeft(0.2, 2.5); //nos deslizamos para estacionarnos abajo del skybridge
+        timeDrive.strafeLeft(0.2, 2.1); //nos deslizamos para estacionarnos abajo del skybridge
 
         hdw.motorSliders.setPower(-1); //bajamos los sliders
         sleep(600);
         hdw.motorSliders.setPower(0);
         sleep(500);
 
-        timeDrive.strafeLeft(0.2, 1.65); //nos deslizamos para estacionarnos abajo del skybridge
+        timeDrive.strafeLeft(0.2, 1.5); //nos deslizamos para estacionarnos abajo del skybridge
 
     }
 

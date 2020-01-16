@@ -1,9 +1,8 @@
 package com.github.deltarobotics9351.deltadrive.drive.mecanum;
 
 import com.github.deltarobotics9351.deltadrive.hardware.DeltaHardware;
-import com.github.deltarobotics9351.deltadrive.parameters.EncoderDriveConstants;
+import com.github.deltarobotics9351.deltadrive.parameters.EncoderDriveParameters;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -19,10 +18,13 @@ public class EncoderDriveMecanum {
 
     private LinearOpMode currentOpMode;
 
-    public EncoderDriveMecanum(DeltaHardware hdw, Telemetry telemetry, LinearOpMode currentOpMode){
+    private EncoderDriveParameters parameters;
+
+    public EncoderDriveMecanum(DeltaHardware hdw, Telemetry telemetry, LinearOpMode currentOpMode, EncoderDriveParameters parameters){
         this.hdw = hdw;
         this.telemetry = telemetry;
         this.currentOpMode = currentOpMode;
+        this.parameters = parameters;
 
         hdw.wheelFrontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         hdw.wheelFrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -43,13 +45,10 @@ public class EncoderDriveMecanum {
                              double backright,
                              double timeoutS) {
 
-        double COUNTS_PER_INCH = (EncoderDriveConstants.COUNTS_PER_REV * EncoderDriveConstants.DRIVE_GEAR_REDUCTION) /
-                (EncoderDriveConstants.WHEEL_DIAMETER_INCHES * 3.1415);
+        parameters.secureParameters();
 
-        hdw.wheelFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        hdw.wheelFrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        hdw.wheelBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        hdw.wheelBackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        double COUNTS_PER_INCH = (parameters.COUNTS_PER_REV * parameters.DRIVE_GEAR_REDUCTION) /
+                (parameters.WHEEL_DIAMETER_INCHES * 3.1415);
 
         int newFrontLeftTarget;
         int newFrontRightTarget;
@@ -57,10 +56,10 @@ public class EncoderDriveMecanum {
         int newBackRightTarget;
 
         // Determine new target position, and pass to motor controller
-        newFrontLeftTarget = hdw.wheelFrontLeft.getCurrentPosition() + (int) (frontleft * COUNTS_PER_INCH);
-        newFrontRightTarget = hdw.wheelFrontRight.getCurrentPosition() + (int) (frontright * COUNTS_PER_INCH);
-        newBackLeftTarget = hdw.wheelBackLeft.getCurrentPosition() + (int) (backleft * COUNTS_PER_INCH);
-        newBackRightTarget = hdw.wheelBackRight.getCurrentPosition() + (int) (backright * COUNTS_PER_INCH);
+        newFrontLeftTarget = hdw.wheelFrontLeft.getCurrentPosition() + (int) (-frontleft * COUNTS_PER_INCH);
+        newFrontRightTarget = hdw.wheelFrontRight.getCurrentPosition() + (int) (-frontright * COUNTS_PER_INCH);
+        newBackLeftTarget = hdw.wheelBackLeft.getCurrentPosition() + (int) (-backleft * COUNTS_PER_INCH);
+        newBackRightTarget = hdw.wheelBackRight.getCurrentPosition() + (int) (-backright * COUNTS_PER_INCH);
 
         hdw.wheelFrontLeft.setTargetPosition(newFrontLeftTarget);
         hdw.wheelFrontRight.setTargetPosition(newFrontRightTarget);
@@ -75,10 +74,10 @@ public class EncoderDriveMecanum {
 
         // reset the timeout time and start motion.
         runtime.reset();
-        hdw.wheelFrontLeft.setPower(Math.abs(speed) * 0.7);
-        hdw.wheelFrontRight.setPower(Math.abs(speed) * 0.9);
-        hdw.wheelBackLeft.setPower(Math.abs(speed) * 0.7);
-        hdw.wheelBackRight.setPower(Math.abs(speed) * 0.9);
+        hdw.wheelFrontLeft.setPower(Math.abs(speed) * parameters.LEFT_WHEELS_TURBO);
+        hdw.wheelFrontRight.setPower(Math.abs(speed) * parameters.RIGHT_WHEELS_TURBO);
+        hdw.wheelBackLeft.setPower(Math.abs(speed) * parameters.LEFT_WHEELS_TURBO);
+        hdw.wheelBackRight.setPower(Math.abs(speed) * parameters.RIGHT_WHEELS_TURBO);
 
         // keep looping while we are still active, and there is time left, and both motors are running.
         // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
@@ -89,6 +88,7 @@ public class EncoderDriveMecanum {
         while ((runtime.seconds() < timeoutS) &&
                 (hdw.wheelFrontRight.isBusy() &&
                         hdw.wheelFrontLeft.isBusy() &&
+                        hdw.wheelBackLeft.isBusy() &&
                         hdw.wheelBackRight.isBusy())) {
 
             telemetry.addData("[>]", "Running to %7d :%7d : %7d :%7d",
@@ -118,11 +118,6 @@ public class EncoderDriveMecanum {
         hdw.wheelFrontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         hdw.wheelBackLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         hdw.wheelBackRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        hdw.wheelFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        hdw.wheelFrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        hdw.wheelBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        hdw.wheelBackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     public void forward(double inches, double speed, double timeoutS) {

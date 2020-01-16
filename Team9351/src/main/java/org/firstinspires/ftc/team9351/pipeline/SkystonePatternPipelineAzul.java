@@ -20,11 +20,10 @@ public class SkystonePatternPipelineAzul extends OpenCvPipeline {
     //se aplica un filtro en el que las stones normales tienen un color diferente
     //a las skystones y asi se puede determinar si se trata de un skystone.
 
-
     //para mover los rectangulos (las zonas en las que se detecta el color) usa las siguientes variables y
-    //no tendras que mover nada mas. La posicion es en relacion al tamano de la vista de la camara
+    //no tendras que mover nada mas. La posicion es en relacion al tamaño de la vista de la camara
 
-    private static final float rectanguloIzquierdoX = 10f;
+    private static final float rectanguloIzquierdoX = 11;
     private static final float rectanguloDerechoX = 9.5f;
 
     private static final float rectanguloIzquierdoY = 5.3f;
@@ -70,11 +69,11 @@ public class SkystonePatternPipelineAzul extends OpenCvPipeline {
 
     //definimos el pattern a una variable basandonos en que hay tres posibilidades, como ya se explico arriba
     public void definePattern(){
-        if(valLeft == 255 && valRight == 255){
+        if(valLeft == 255 && valRight == 0){
             pattern = 1;
-        }else if(valLeft == 255 && valRight == 0){
-            pattern = 2;
         }else if(valLeft == 0 && valRight == 255){
+            pattern = 2;
+        }else if(valLeft == 255 && valRight == 255){
             pattern = 3;
         }else{
             pattern = 0; // desconocido, se posiciono de forma erronea el robot.

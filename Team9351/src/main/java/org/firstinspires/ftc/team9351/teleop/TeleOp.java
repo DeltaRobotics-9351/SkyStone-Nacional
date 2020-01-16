@@ -81,11 +81,11 @@ public class TeleOp extends LinearOpMode { //la clase extendera a otra llamada '
         //intake
         if (gamepad2.a) {
             if (gamepad2.left_trigger > 0.1) {
-                double minusPower = Range.clip(gamepad2.left_trigger, 0,0.4);
+                double minusPower = Range.clip(gamepad2.left_trigger, 0,0.5);
                 hdw.motorIntakeLeft.setPower(1 - minusPower);
                 hdw.motorIntakeRight.setPower(1 - minusPower);
             }else if (gamepad2.right_trigger > 0.1){
-                double minusPower = Range.clip(gamepad2.right_trigger, 0,0.4);
+                double minusPower = Range.clip(gamepad2.right_trigger, 0,0.5);
                 hdw.motorIntakeLeft.setPower(1 - minusPower);
                 hdw.motorIntakeRight.setPower(1 - minusPower);
             }else{
@@ -94,11 +94,11 @@ public class TeleOp extends LinearOpMode { //la clase extendera a otra llamada '
             }
         } else if (gamepad2.b) {
             if (gamepad2.left_trigger > 0.1) {
-                double minusPower = Range.clip(gamepad2.left_trigger, 0,0.4);
+                double minusPower = Range.clip(gamepad2.left_trigger, 0,0.5);
                 hdw.motorIntakeLeft.setPower(-1 +  minusPower);
                 hdw.motorIntakeRight.setPower(-1 +  minusPower);
             }else if (gamepad2.right_trigger > 0.1){
-                double minusPower = Range.clip(gamepad2.right_trigger, 0,0.4);
+                double minusPower = Range.clip(gamepad2.right_trigger, 0,0.5);
                 hdw.motorIntakeLeft.setPower(-1 +  minusPower);
                 hdw.motorIntakeRight.setPower(-1 +  minusPower);
             }else{

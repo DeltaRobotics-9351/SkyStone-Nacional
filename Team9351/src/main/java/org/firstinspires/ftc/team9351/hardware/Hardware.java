@@ -52,13 +52,9 @@ public class Hardware {
         servoCapstone = hwMap.servo.get("SC");
 
         //La direccion por default de estos motores sera FORWARD
-        wheelFrontLeft.setDirection(DcMotor.Direction.FORWARD);
         motorIntakeRight.setDirection(DcMotor.Direction.FORWARD);
         motorSliders.setDirection(DcMotor.Direction.FORWARD);
         //La direccion por default de estos motores sera REVERSE
-        wheelFrontRight.setDirection(DcMotor.Direction.REVERSE);
-        wheelBackLeft.setDirection(DcMotor.Direction.REVERSE);
-        wheelBackRight.setDirection(DcMotor.Direction.REVERSE);
         motorIntakeLeft.setDirection(DcMotor.Direction.REVERSE);
 
         //el power de todos los motores se define a 0
@@ -72,6 +68,9 @@ public class Hardware {
 
         //estos motores frenaran si su power es 0
         motorSliders.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motorIntakeLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motorIntakeRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
 
         //se define la posicion por default de estos servos
         servoStoneAutonomous.setPosition(0);
@@ -85,20 +84,6 @@ public class Hardware {
         motorIntakeLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motorIntakeRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motorSliders.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-    }
-
-    public void allWheelsForward(){
-        wheelFrontLeft.setDirection(DcMotor.Direction.FORWARD);
-        wheelFrontRight.setDirection(DcMotor.Direction.FORWARD);
-        wheelBackLeft.setDirection(DcMotor.Direction.FORWARD);
-        wheelBackRight.setDirection(DcMotor.Direction.FORWARD);
-    }
-
-    public void defaultWheelsDirection(){
-        wheelFrontLeft.setDirection(DcMotor.Direction.FORWARD);
-        wheelFrontRight.setDirection(DcMotor.Direction.REVERSE);
-        wheelBackLeft.setDirection(DcMotor.Direction.REVERSE);
-        wheelBackRight.setDirection(DcMotor.Direction.REVERSE);
     }
 
 }

@@ -2,21 +2,20 @@ package org.firstinspires.ftc.team9351.autonomous.nacional;
 
 
 import com.github.deltarobotics9351.deltadrive.drive.mecanum.IMUDriveMecanum;
+import com.github.deltarobotics9351.deltadrive.drive.mecanum.TimeDriveMecanum;
 import com.github.deltarobotics9351.deltadrive.hardware.DeltaHardware;
 import com.github.deltarobotics9351.deltadrive.parameters.IMUDriveParameters;
 import com.github.deltarobotics9351.deltadrive.utils.ChassisType;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.team9351.MotivateTelemetry;
 import org.firstinspires.ftc.team9351.hardware.Hardware;
 
-import com.github.deltarobotics9351.deltadrive.drive.mecanum.TimeDriveMecanum;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-
-@Autonomous(name="NA-Autonomo Foundation Rojo", group="Final")
-public class AutonomoFoundationRojo_1 extends LinearOpMode {
+@Disabled
+@Autonomous(name="NA-B-Autonomo Foundation Rojo", group="Final")
+public class AutonomoFoundationRojo_2 extends LinearOpMode {
 
     private Hardware hdw;
     private TimeDriveMecanum timeDrive; //en este objeto se encuentran todas las funciones para
@@ -63,7 +62,7 @@ public class AutonomoFoundationRojo_1 extends LinearOpMode {
 
         timeDrive.forward(1, 0.1); //avanzamos un poco
 
-        imuDrive.rotate(-20, 0.5); // giramos en direccion a el centro de la foundation
+        imuDrive.rotate(-15, 0.5); // giramos en direccion a el centro de la foundation
 
         subirSliders();
 
@@ -79,33 +78,15 @@ public class AutonomoFoundationRojo_1 extends LinearOpMode {
 
         //timeDrive.forward(1, 0.3);
 
-        timeDrive.backwards(0.4, 2.4); //jalamos la foundation
+        timeDrive.backwards(0.4, 1.8); //jalamos la foundation
+
+        imuDrive.rotate(-90, 0.5);
 
         subirSliders();
 
-        imuDrive.rotate(-90, 0.5); //giramos para salir de la building site
+        timeDrive.backwards(0.8, 0.5);
 
-        timeDrive.backwards(0.5, 0.7); //salimos de la building site
 
-        imuDrive.rotate(90, 0.5); //giramos hacia el neutral bridge
-
-        timeDrive.forward(0.5, 1.3); //avanzamos
-
-        imuDrive.rotate(90, 0.5); //giramos hacia la pared
-
-        timeDrive.backwards(1, 0.4); //avanzamos
-
-        imuDrive.rotate(-90, 0.5); //giramos hacia la foundation
-
-        timeDrive.backwards(0.3, 3.5); //avanzamos para empujarla
-
-        imuDrive.rotate(-90, 0.5); //giramos hacia el skybridge
-
-        bajarSliders();
-
-        timeDrive.backwards(1, 0.5); //vamos hacia el skybridge
-
-        hdw.servoStoneAutonomous.setPosition(0.5);
     }
 
     public void agitarse(){
