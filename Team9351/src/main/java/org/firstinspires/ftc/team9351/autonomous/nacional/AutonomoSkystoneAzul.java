@@ -49,7 +49,7 @@ public class AutonomoSkystoneAzul extends LinearOpMode {
 
         imuTurn.initIMU(parameters);
 
-        while(!imuTurn.isIMUCalibrated() && opModeIsActive()){
+        while(!imuTurn.isIMUCalibrated() && !isStopRequested()){
             telemetry.addData("[/!\\]", "Calibrando el sensor IMU, espera...");
             telemetry.addData("[Status]", imuTurn.getIMUCalibrationStatus());
             telemetry.update();

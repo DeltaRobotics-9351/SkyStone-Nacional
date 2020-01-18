@@ -40,11 +40,10 @@ public class AutonomoFoundationRojo_1 extends LinearOpMode {
         IMUDriveParameters parameters = new IMUDriveParameters();
         parameters.ROTATE_CORRECTION_POWER = 0.15;
         parameters.ROTATE_MAX_CORRECTION_TIMES = 3;
-
         imuDrive = new IMUDriveMecanum(deltaHardware, this);
         imuDrive.initIMU(parameters);
 
-        while(!imuDrive.isIMUCalibrated() && opModeIsActive()){
+        while(!imuDrive.isIMUCalibrated() && !isStopRequested()){
             telemetry.addData("[/!\\]", "Calibrando el sensor IMU, espera...");
             telemetry.addData("[Status]", imuDrive.getIMUCalibrationStatus());
             telemetry.update();

@@ -50,7 +50,7 @@ public class AutonomoSkystoneRojo extends LinearOpMode {
 
         imuTurn.initIMU(parameters);
 
-        while(!imuTurn.isIMUCalibrated() && opModeIsActive()){
+        while(!imuTurn.isIMUCalibrated() && isStopRequested()){
             telemetry.addData("[/!\\]", "Calibrando el sensor IMU, espera...");
             telemetry.addData("[Status]", imuTurn.getIMUCalibrationStatus());
             telemetry.update();
@@ -159,10 +159,10 @@ public class AutonomoSkystoneRojo extends LinearOpMode {
             hdw.servoStoneAutonomous.setPosition(0);
             sleep((long)1000);
 
-            timeDrive.forward(0.6, 2.5);
+            timeDrive.forward(0.6, 2.4);
             //sleep((long)1000);
             imuTurn.rotate(90, 0.4);
-            timeDrive.backwards(0.4,1.2);
+            timeDrive.backwards(0.2,1.6);
 
             sleep((long)100);
             hdw.servoStoneAutonomous.setPosition(0.5f);
@@ -187,7 +187,7 @@ public class AutonomoSkystoneRojo extends LinearOpMode {
 
         }else if(pattern == 3){
 
-            imuTurn.rotate(-15, 0.4);
+            imuTurn.rotate(-10, 0.4);
 
             timeDrive.backwards(0.4,1.4);
 
@@ -195,7 +195,7 @@ public class AutonomoSkystoneRojo extends LinearOpMode {
             hdw.servoStoneAutonomous.setPosition(0.5f);
             sleep((long)1000);
 
-            imuTurn.rotate(15, 0.4);
+            imuTurn.rotate(10, 0.4);
 
             timeDrive.forward(0.6,0.6);
             sleep((long)1000);
@@ -205,7 +205,7 @@ public class AutonomoSkystoneRojo extends LinearOpMode {
             hdw.servoStoneAutonomous.setPosition(0);
             sleep((long)1000);
 
-            timeDrive.forward(0.6, 1.9);
+            timeDrive.forward(0.6, 1.95);
             sleep((long)1000);
             imuTurn.rotate(90, 0.4);
             timeDrive.backwards(0.4,1.2);
