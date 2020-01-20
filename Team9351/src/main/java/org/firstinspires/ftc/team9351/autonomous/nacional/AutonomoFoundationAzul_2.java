@@ -14,13 +14,13 @@ import org.firstinspires.ftc.team9351.MotivateTelemetry;
 import org.firstinspires.ftc.team9351.hardware.Hardware;
 
 @Disabled
-@Autonomous(name="NA-B-Autonomo Foundation Rojo", group="Final")
-public class AutonomoFoundationRojo_2 extends LinearOpMode {
+@Autonomous(name="NA-B-Autonomo Foundation Azul", group="Final")
+public class AutonomoFoundationAzul_2 extends LinearOpMode {
 
     private Hardware hdw;
     private TimeDriveMecanum timeDrive; //en este objeto se encuentran todas las funciones para
-                                        //el movimiento de las llantas mecanum con tiempo para
-                                        //mantener el codigo mas organizado y facil de cambiar.
+    //el movimiento de las llantas mecanum con tiempo para
+    //mantener el codigo mas organizado y facil de cambiar.
 
     private IMUDriveMecanum imuDrive;
 
@@ -34,13 +34,14 @@ public class AutonomoFoundationRojo_2 extends LinearOpMode {
         deltaHardware = new DeltaHardware(hardwareMap, hdw.wheelFrontLeft, hdw.wheelFrontRight, hdw.wheelBackLeft, hdw.wheelBackRight, ChassisType.mecanum);
 
         timeDrive = new TimeDriveMecanum(deltaHardware, telemetry); //el objeto necesita el hardware para definir el power
-                                                                    //a los motores y el telemetry para mandar mensajes.
+        //a los motores y el telemetry para mandar mensajes.
+
+        imuDrive = new IMUDriveMecanum(deltaHardware, this);
 
         IMUDriveParameters parameters = new IMUDriveParameters();
         parameters.ROTATE_CORRECTION_POWER = 0.15;
         parameters.ROTATE_MAX_CORRECTION_TIMES = 3;
 
-        imuDrive = new IMUDriveMecanum(deltaHardware, this);
         imuDrive.initIMU(parameters);
 
         while(!imuDrive.isIMUCalibrated() && !isStopRequested()){
@@ -49,7 +50,7 @@ public class AutonomoFoundationRojo_2 extends LinearOpMode {
             telemetry.update();
         }
 
-       // hdw.wheelFrontLeft.setDirection(DcMotor.Direction.REVERSE);
+        // hdw.wheelFrontLeft.setDirection(DcMotor.Direction.REVERSE);
 
         MotivateTelemetry.doMotivateRed(telemetry);
         telemetry.update();
@@ -58,16 +59,17 @@ public class AutonomoFoundationRojo_2 extends LinearOpMode {
         waitForStart();
 
         agitarse();
+        //agitarse();
 
         timeDrive.forward(1, 0.1); //avanzamos un poco
 
-        imuDrive.rotate(20, 0.5); // giramos en direccion a el centro de la foundation
+        imuDrive.rotate(5, 0.5); // giramos en direccion a el centro de la foundation
 
         subirSliders();
 
         timeDrive.forward(0.5, 0.8); //avanzamos hacia la foundation
 
-        imuDrive.rotate(-10, 0.5); //nos alineamos a la foundation
+        imuDrive.rotate(-5, 0.5); //nos alineamos a la foundation
 
         //imuDrive.rotate(20, 0.5);
 
@@ -79,12 +81,16 @@ public class AutonomoFoundationRojo_2 extends LinearOpMode {
 
         timeDrive.backwards(0.4, 2.4); //jalamos la foundation
 
+        timeDrive.strafeRight(0.4, 5);
+
+        timeDrive.backwards(0.4, 0.5); //jalamos la foundation
+
+
         subirSliders();
 
-        timeDrive.strafeLeft(0.3, 4);
+        timeDrive.strafeRight(0.4, 4);
 
         hdw.servoStoneAutonomous.setPosition(0.5);
-
     }
 
     public void agitarse(){
@@ -104,6 +110,7 @@ public class AutonomoFoundationRojo_2 extends LinearOpMode {
         hdw.motorSliders.setPower(0);
         sleep(500);
     }
+
 
 
 }

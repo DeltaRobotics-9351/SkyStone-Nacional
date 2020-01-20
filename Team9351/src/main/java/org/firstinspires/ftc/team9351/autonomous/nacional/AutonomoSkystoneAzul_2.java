@@ -8,17 +8,15 @@ import com.github.deltarobotics9351.deltadrive.utils.ChassisType;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.team9351.MotivateTelemetry;
 import org.firstinspires.ftc.team9351.hardware.Hardware;
 import org.firstinspires.ftc.team9351.pipeline.SkystonePatternPipelineAzul;
-import org.firstinspires.ftc.team9351.pipeline.SkystonePatternPipelineRojo;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvInternalCamera;
 
-@Autonomous(name="Autonomo Skystone Azul", group="Final")
-public class AutonomoSkystoneAzul extends LinearOpMode {
+@Autonomous(name="B-Autonomo Skystone Azul", group="Final")
+public class AutonomoSkystoneAzul_2 extends LinearOpMode {
 
     private OpenCvCamera phoneCam;
     private SkystonePatternPipelineAzul patternPipeline;
@@ -96,99 +94,61 @@ public class AutonomoSkystoneAzul extends LinearOpMode {
         telemetry.update();
 
         //sleep(1000);
-
         if(pattern == 1) {
 
-            imuTurn.rotate(-10, 0.4);
+            imuTurn.rotate(-15, 0.4);
 
-            timeDrive.backwards(0.4, 1.4);
-
-            sleep((long) 100);
-            hdw.servoStoneAutonomous.setPosition(0.5f);
-            sleep((long) 1000);
-
-            imuTurn.rotate(10, 0.4);
-
-            timeDrive.forward(0.6,0.6);
-            sleep((long)1000);
-            imuTurn.rotate(90, 0.4);
-            timeDrive.backwards(0.6,1.7);
-
-            hdw.servoStoneAutonomous.setPosition(0);
-            sleep((long)1000);
-
-            timeDrive.forward(0.6, 2);
-            sleep((long)1000);
-            imuTurn.rotate(-90, 0.4);
-            timeDrive.backwards(0.4,1.2);
+            timeDrive.backwards(0.3, 1.9);
 
             sleep((long)100);
             hdw.servoStoneAutonomous.setPosition(0.5f);
             sleep((long)1000);
-            timeDrive.forward(0.6,0.7);
+
+            imuTurn.rotate(15, 0.4);
+
+            timeDrive.forward(0.6,1);
             sleep((long)1000);
             imuTurn.rotate(90, 0.4);
-            timeDrive.backwards(0.6,2.2);
+            timeDrive.backwards(0.6,1.4);
 
-            sleep((long)1000);
             hdw.servoStoneAutonomous.setPosition(0);
             sleep((long)1000);
 
-            //Que es esto?
-            timeDrive.forward(0.6,0.6);
+            timeDrive.forward(0.6,0.2);
 
-            sleep((long)500);
+            sleep((long)100);
             hdw.servoStoneAutonomous.setPosition(0.5f);
+            sleep((long)1000);
 
             //sebas no me quiere enseñar a programar
 
         }else if(pattern == 2){
 
-            timeDrive.backwards(0.4,1.2);
+            timeDrive.backwards(0.3, 1.9);
 
             sleep((long)100);
             hdw.servoStoneAutonomous.setPosition(0.5f);
             sleep((long)1000);
 
-            timeDrive.forward(0.6,0.6);
+            timeDrive.forward(0.6,1);
             sleep((long)1000);
             imuTurn.rotate(90, 0.4);
-            timeDrive.backwards(0.6,1.6);
+            timeDrive.backwards(0.6,1.4);
 
             hdw.servoStoneAutonomous.setPosition(0);
             sleep((long)1000);
 
-            timeDrive.forward(0.6, 2.5);
-            sleep((long)1000);
-            imuTurn.rotate(-90, 0.4);
-            timeDrive.backwards(0.4,1.2);
-            //el que lea esto es tontito jaja
+            timeDrive.forward(0.6,0.2);
+
             sleep((long)100);
             hdw.servoStoneAutonomous.setPosition(0.5f);
             sleep((long)1000);
-
-            //ayuda sebas me esclaviza para que programe por el y despues toma el credito
-
-            timeDrive.forward(0.6,0.9);
-            sleep((long)1000);
-            imuTurn.rotate(90, 0.4);
-            timeDrive.backwards(0.6,2.2);
-
-            sleep((long)1000);
-            hdw.servoStoneAutonomous.setPosition(0);
-            sleep((long)1000);
-
-            //Que es esto?
-            timeDrive.forward(0.6,0.8);
-
-            sleep((long)500);
-            hdw.servoStoneAutonomous.setPosition(0.5f);
 
         }else if(pattern == 3){
 
             imuTurn.rotate(15, 0.4);
 
-            timeDrive.backwards(0.4,1.3);
+            timeDrive.backwards(0.3, 1.9);
 
             sleep((long)100);
             hdw.servoStoneAutonomous.setPosition(0.5f);
@@ -196,39 +156,24 @@ public class AutonomoSkystoneAzul extends LinearOpMode {
 
             imuTurn.rotate(-15, 0.4);
 
-            timeDrive.forward(0.6,0.6);
+            sleep((long)100);
+            hdw.servoStoneAutonomous.setPosition(0.5f);
+            sleep((long)1000);
+
+            timeDrive.forward(0.6,1);
             sleep((long)1000);
             imuTurn.rotate(90, 0.4);
-            timeDrive.backwards(0.6,1.5);
+            timeDrive.backwards(0.6,1.4);
 
             hdw.servoStoneAutonomous.setPosition(0);
             sleep((long)1000);
 
-            timeDrive.forward(0.6, 2.3);
-            sleep((long)1000);
-            imuTurn.rotate(-90, 0.4);
-            timeDrive.backwards(0.4,1.2);
-
-            timeDrive.backwards(0.4,0.3);
+            timeDrive.forward(0.6,0.2);
 
             sleep((long)100);
             hdw.servoStoneAutonomous.setPosition(0.5f);
             sleep((long)1000);
 
-            timeDrive.forward(0.6,0.7);
-            sleep((long)1000);
-            imuTurn.rotate(90, 0.4);
-            timeDrive.backwards(0.6,2.2);
-
-            sleep((long)1000);
-            hdw.servoStoneAutonomous.setPosition(0);
-            sleep((long)1000);
-
-            //Que es esto?
-            timeDrive.forward(0.6,0.5);
-
-            sleep((long)500);
-            hdw.servoStoneAutonomous.setPosition(0.5f);
         }else{
             //en teoria este codigo nunca se deberia de ejecutar, pero por si las dudas...
             telemetry.addData("[ERROR]", "No se que ha pasado ni como has llegado hasta aqui. Lo siento =(");

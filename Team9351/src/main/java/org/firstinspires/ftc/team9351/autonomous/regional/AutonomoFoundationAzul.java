@@ -37,7 +37,7 @@ public class AutonomoFoundationAzul extends LinearOpMode {
         //esperamos que el usuario presione <play> en la driver station
         waitForStart();
 
-        timeDrive.strafeLeft(0.25, 1); //nos deslizamos
+        timeDrive.strafeLeft(0.3, 1.7); //nos deslizamos
 
         timeDrive.forward(0.6, 0.2); //nos agitamos para bajar el intake
         timeDrive.backwards(0.6, 0.2);
@@ -61,14 +61,14 @@ public class AutonomoFoundationAzul extends LinearOpMode {
 
         sleep(16000); //esperamos
 
-        timeDrive.strafeRight(0.2, 2.1); //nos deslizamos para estacionarnos abajo del skybridge
+        timeDrive.strafeRight(0.4, 2.1); //nos deslizamos para estacionarnos abajo del skybridge
 
         hdw.motorSliders.setPower(-1); //bajamos los sliders
         sleep(600);
         hdw.motorSliders.setPower(0);
         sleep(500);
 
-        timeDrive.strafeRight(0.2, 1.5); //nos deslizamos para estacionarnos abajo del skybridge
+        timeDrive.strafeRight(0.4, 4); //nos deslizamos para estacionarnos abajo del skybridge
 
     }
 

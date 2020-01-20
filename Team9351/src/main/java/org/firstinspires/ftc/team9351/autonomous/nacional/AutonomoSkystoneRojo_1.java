@@ -18,8 +18,8 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvInternalCamera;
 
-@Autonomous(name="Autonomo Skystone Rojo", group="Final")
-public class AutonomoSkystoneRojo extends LinearOpMode {
+@Autonomous(name="A-Autonomo Skystone Rojo", group="Final")
+public class AutonomoSkystoneRojo_1 extends LinearOpMode {
 
     private OpenCvCamera phoneCam;
     private SkystonePatternPipelineRojo patternPipeline;
@@ -118,7 +118,7 @@ public class AutonomoSkystoneRojo extends LinearOpMode {
             hdw.servoStoneAutonomous.setPosition(0);
             sleep((long)1000);
 
-            timeDrive.forward(0.6, 2);
+            timeDrive.forward(0.6, 1.9);
             sleep((long)1000);
             imuTurn.rotate(90, 0.4);
             timeDrive.backwards(0.4,1.2);
@@ -162,7 +162,7 @@ public class AutonomoSkystoneRojo extends LinearOpMode {
             timeDrive.forward(0.6, 2.4);
             //sleep((long)1000);
             imuTurn.rotate(90, 0.4);
-            timeDrive.backwards(0.2,1.6);
+            timeDrive.backwards(0.4,1.2);
 
             sleep((long)100);
             hdw.servoStoneAutonomous.setPosition(0.5f);
@@ -189,7 +189,7 @@ public class AutonomoSkystoneRojo extends LinearOpMode {
 
             imuTurn.rotate(-10, 0.4);
 
-            timeDrive.backwards(0.4,1.4);
+            timeDrive.backwards(0.3,1.4);
 
             sleep((long)100);
             hdw.servoStoneAutonomous.setPosition(0.5f);
@@ -205,7 +205,7 @@ public class AutonomoSkystoneRojo extends LinearOpMode {
             hdw.servoStoneAutonomous.setPosition(0);
             sleep((long)1000);
 
-            timeDrive.forward(0.6, 1.95);
+            timeDrive.forward(0.6, 1.9);
             sleep((long)1000);
             imuTurn.rotate(90, 0.4);
             timeDrive.backwards(0.4,1.2);
@@ -224,7 +224,7 @@ public class AutonomoSkystoneRojo extends LinearOpMode {
             sleep((long)500);
 
             //Que es esto?
-            timeDrive.forward(1,0.3);
+            timeDrive.forward(1,0.6);
 
             sleep((long)500);
             hdw.servoStoneAutonomous.setPosition(0.5f);
